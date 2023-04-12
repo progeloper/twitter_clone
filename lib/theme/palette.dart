@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class Palette{
   static const whiteColor = Color(0xFFFFFFFF);
   static const blueColor = Color.fromRGBO(29, 161, 242, 1);
-  static const blackColor = Color.fromRGBO(20, 23, 26, 1);
+  static const blackColor = Color.fromRGBO(1, 1, 1, 1);
   static const darkBlueColor = Color.fromRGBO(34, 48, 60, 1);
   static const darkGreyColor = Color.fromRGBO(101, 119, 134, 1);
   static const lightGreyColor = Color.fromRGBO(170, 184, 194, 1);
