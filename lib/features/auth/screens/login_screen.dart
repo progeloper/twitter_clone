@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:twitter_clone/common/widgets/input_text_field.dart';
-import 'package:twitter_clone/common/widgets/rounded_filled_button.dart';
+import 'package:twitter_clone/core/common/widgets/input_text_field.dart';
+import 'package:twitter_clone/core/common/widgets/rounded_filled_button.dart';
 
 import '../../../theme/palette.dart';
 
@@ -45,7 +45,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             BlendMode.srcIn,
           ),
           fit: BoxFit.scaleDown,
-          width: 50,
+          width: 35,
         ),
         centerTitle: true,
       ),
@@ -83,7 +83,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  RoundedFilledButton(function: (){}, label: 'Log in'),
+                  RoundedFilledButton(function: (){}, label: 'Log in',),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: (){},
+                        child: const Text('Forgot password?', style: TextStyle(color: Palette.blueColor),),
+                      ),
+                      const Text(' • '),
+                      InkWell(
+                        onTap: (){},
+                        child: const Text('Sign up for Twitter', style: TextStyle(color: Palette.blueColor),),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
