@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/common/widgets/input_text_field.dart';
 import 'package:twitter_clone/core/common/widgets/rounded_filled_button.dart';
 
@@ -25,6 +26,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+  }
+
+  void navigateToSignpScreen(BuildContext context){
+    Routemaster.of(context).push('/signup-screen');
   }
 
   @override

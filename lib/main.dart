@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/features/auth/screens/details_screen.dart';
 import 'package:twitter_clone/features/auth/screens/login_screen.dart';
+import 'package:twitter_clone/features/auth/screens/signup_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,7 +12,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 
@@ -22,9 +25,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Twitter Clone',
       theme: Palette.lightsOutModeAppTheme,
-      home: const LoginScreen(),
+      home: const DetailsScreen(name: 'mayo', email: 'maayo@email.com', dob: '14 aug 1998'),
     );
   }
 }
