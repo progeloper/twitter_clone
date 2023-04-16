@@ -1,5 +1,6 @@
 class User {
   final String email;
+  final String  name;
   final String username;
   final String uid;
   final String displayPic;
@@ -15,6 +16,7 @@ class User {
 //<editor-fold desc="Data Methods">
   const User({
     required this.email,
+    required this.name,
     required this.username,
     required this.uid,
     required this.displayPic,
@@ -28,9 +30,9 @@ class User {
     required this.following,
   });
 
-
   User copyWith({
     String? email,
+    String? name,
     String? username,
     String? uid,
     String? displayPic,
@@ -45,6 +47,7 @@ class User {
   }) {
     return User(
       email: email ?? this.email,
+      name: name ?? this.name,
       username: username ?? this.username,
       uid: uid ?? this.uid,
       displayPic: displayPic ?? this.displayPic,
@@ -62,6 +65,7 @@ class User {
   Map<String, dynamic> toMap() {
     return {
       'email': this.email,
+      'name': this.name,
       'username': this.username,
       'uid': this.uid,
       'displayPic': this.displayPic,
@@ -79,6 +83,7 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       email: map['email'] as String,
+      name: map['name'] as String,
       username: map['username'] as String,
       uid: map['uid'] as String,
       displayPic: map['displayPic'] as String,
@@ -88,8 +93,8 @@ class User {
       url: map['url'] as String,
       joined: map['joined'] as dynamic,
       dob: map['dob'] as String,
-      followers: List<String>.from(map['followers']),
-      following: List<String>.from(map['following']),
+      followers: map['followers'] as List<String>,
+      following: map['following'] as List<String>,
     );
   }
 

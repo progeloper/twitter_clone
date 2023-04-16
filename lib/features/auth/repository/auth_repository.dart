@@ -42,7 +42,8 @@ class AuthRepository {
           email: email, password: password);
       model.User user = model.User(
           email: email,
-          username: name,
+          name: name,
+          username: '${name.substring(4)}${cred.user!.uid.substring(3)}',
           uid: cred.user!.uid,
           displayPic: displayPic,
           banner: banner,
@@ -60,5 +61,27 @@ class AuthRepository {
     } catch (e) {
       return left(Failure(e.toString()));
     }
+  }
+
+  FutureEither<model.User> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      UserCredential cred =await  _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      model.User user = await getUserData(cred.user!.uid).first;
+      return right(user);
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  Stream<model.User> getUserData(String uid){
+    return _users.doc(uid).snapshots().map((event) => model.User.fromMap(event.data() as Map<String, dynamic>));
   }
 }

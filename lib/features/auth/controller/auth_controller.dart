@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
+import 'package:intl/intl.dart';
+import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/repository/auth_repository.dart';
+import 'package:twitter_clone/models/user.dart';
+
+import '../../../core/common/utils.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
@@ -9,7 +13,7 @@ final authControllerProvider =
   return AuthController(repo: repo, ref: ref);
 });
 
-final userProvider = StateProvider((ref) => null);
+final userProvider = StateProvider<User?>((ref) => null);
 
 class AuthController extends StateNotifier<bool> {
   final AuthRepository _repo;
@@ -25,12 +29,6 @@ class AuthController extends StateNotifier<bool> {
     required String email,
     required String dob,
     required String password,
-    required String banner,
-    required String displayPic,
-    required String bio,
-    required String url,
-    required String joined,
-    required String location,
   }) async {
     state = true;
     final user = await _repo.signUp(
@@ -38,13 +36,27 @@ class AuthController extends StateNotifier<bool> {
         email: email,
         dob: dob,
         password: password,
-        banner: banner,
-        displayPic: displayPic,
-        bio: bio,
-        url: url,
-        joined: joined,
-        location: location);
+        banner: Constants.defaultBanner,
+        displayPic: Constants.defaultAvatar,
+        bio: 'Hi there, I use twitter',
+        url: 'www.twitter.com',
+        joined: DateFormat('dd MMMM yyyy').format(DateTime.now()),
+        location: 'Twitter Hq');
     state = false;
-    user.fold((l) => null, (r) => null)
+    user.fold((l) => showSnackBar(context, l.error), (r) {
+      showSnackBar(context, '${r.username} signed up successfully');
+      _ref.read(userProvider.notifier).update((state) => r);
+    });
+  }
+
+  void login({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
+    final user = await _repo.login(email: email, password: password);
+    user.fold((l) => showSnackBar(context, l.error), (r) {
+      _ref.read(userProvider.notifier).update((state) => r);
+    });
   }
 }
