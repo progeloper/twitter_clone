@@ -84,4 +84,6 @@ class AuthRepository {
   Stream<model.User> getUserData(String uid){
     return _users.doc(uid).snapshots().map((event) => model.User.fromMap(event.data() as Map<String, dynamic>));
   }
+
+  Stream<User?> get authStateChange => _auth.authStateChanges();
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:intl/intl.dart';
 import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/repository/auth_repository.dart';
@@ -15,6 +16,11 @@ final authControllerProvider =
 
 final userProvider = StateProvider<User?>((ref) => null);
 
+final authStateChangeProvider = StreamProvider((ref){
+  final authController = ref.read(authControllerProvider.notifier);
+  return authController.authStateChanges;
+});
+
 class AuthController extends StateNotifier<bool> {
   final AuthRepository _repo;
   final Ref _ref;
@@ -22,6 +28,8 @@ class AuthController extends StateNotifier<bool> {
       : _repo = repo,
         _ref = ref,
         super(false);
+
+  Stream<auth.User?> get authStateChanges => _repo.authStateChange;
 
   void signup({
     required BuildContext context,
