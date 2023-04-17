@@ -31,6 +31,10 @@ class AuthController extends StateNotifier<bool> {
 
   Stream<auth.User?> get authStateChanges => _repo.authStateChange;
 
+  Stream<User> getUserData(String uid){
+    return _repo.getUserData(uid);
+  }
+
   void signup({
     required BuildContext context,
     required String name,
