@@ -18,6 +18,9 @@ class Constants{
   );
 
   static const tabScreens = <Widget>[
-    LoginScreen()
+    Center(child: Text('feed'),),
+    Center(child: Text('search'),),
+    Center(child: Text('notifications'),),
+    Center(child: Text('messages'),),
   ];
 }
