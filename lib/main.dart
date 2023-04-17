@@ -57,8 +57,8 @@ class _MyAppState extends ConsumerState<MyApp> {
               routesBuilder: (context) {
                 if (data != null) {
                   getData(ref, data);
-                  if(userModel == null){
-                    return loggedOutRoute;
+                  if(userModel != null){
+                    return loggedInRoute;
                   }
                 }
                 return loggedOutRoute;
@@ -72,17 +72,3 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 }
 
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Twitter Clone',
-//       theme: Palette.lightsOutModeAppTheme,
-//       home: const DetailsScreen(name: 'mayo', email: 'maayo@email.com', dob: '14 aug 1998'),
-//     );
-//   }
-// }

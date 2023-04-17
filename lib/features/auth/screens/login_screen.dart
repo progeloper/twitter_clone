@@ -33,6 +33,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     Routemaster.of(context).push('/signup-screen');
   }
 
+  void login(BuildContext context, WidgetRef ref){
+    if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty){
+      ref.read(authControllerProvider.notifier).login(context: context, email: _emailController.text.trim(), password: _passwordController.text.trim());
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();

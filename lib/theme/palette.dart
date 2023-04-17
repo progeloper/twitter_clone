@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
-class Palette{
+final themeProvider = StateNotifierProvider<ToggleThemeNotifier, ThemeData>((ref) {
+  return ToggleThemeNotifier();
+});
+
+
+class Palette {
   static const whiteColor = Color(0xFFFFFFFF);
   static const blueColor = Color.fromRGBO(29, 161, 242, 1);
   static const blackColor = Color.fromRGBO(1, 1, 1, 1);
@@ -125,5 +132,52 @@ class Palette{
     ),
     primaryColor: blueColor,
   );
+}
+
+class ToggleThemeNotifier extends StateNotifier<ThemeData> {
+  ThemeMode _mode;
+  ToggleThemeNotifier({ThemeMode mode = ThemeMode.dark})
+      : _mode = mode,
+        super(Palette.lightsOutModeAppTheme);
+
+  void getTheme()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final theme = prefs.getString('theme');
+    if(theme == 'light'){
+      _mode = ThemeMode.light;
+      state = Palette.lightModeAppTheme;
+    } else if(theme == 'dim'){
+      _mode = ThemeMode.dark;
+      state = Palette.dimDarkModeAppTheme;
+    } else {
+      _mode = ThemeMode.dark;
+      state = Palette.lightsOutModeAppTheme;
+    }
+  }
+
+  ThemeMode get mode => _mode;
+
+  void toggleTheme(bool dim)async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final theme = prefs.getString('theme');
+    if(theme=='light'){
+      if(dim){
+        _mode = ThemeMode.dark;
+        state = Palette.dimDarkModeAppTheme;
+        prefs.setString('theme', 'dim');
+        getTheme();
+      } else{
+        _mode = ThemeMode.dark;
+        state = Palette.lightsOutModeAppTheme;
+        prefs.setString('theme', 'lightsOut');
+        getTheme();
+      }
+    } else{
+      _mode = ThemeMode.light;
+      state = Palette.lightModeAppTheme;
+      prefs.setString('theme', 'light');
+      getTheme();
+    }
+  }
 
 }

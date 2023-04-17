@@ -3,6 +3,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/features/auth/screens/details_screen.dart';
 import 'package:twitter_clone/features/auth/screens/login_screen.dart';
 import 'package:twitter_clone/features/auth/screens/signup_screen.dart';
+import 'package:twitter_clone/features/home/screens/home_screen.dart';
 
 final loggedOutRoute = RouteMap(routes: {
   '/': (_) => const MaterialPage(child: LoginScreen()),
@@ -13,4 +14,8 @@ final loggedOutRoute = RouteMap(routes: {
         email: route.pathParameters['email']!,
         dob: route.pathParameters['dob']!,
       )),
+});
+
+final loggedInRoute = RouteMap(routes: {
+  '/': (_) => const MaterialPage(child: HomeScreen()),
 });
