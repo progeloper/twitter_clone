@@ -28,7 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     _passwordController = TextEditingController();
   }
 
-  void navigateToSignpScreen(BuildContext context){
+  void navigateToSignupScreen(BuildContext context){
     Routemaster.of(context).push('/signup-screen');
   }
 
@@ -102,7 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const Text(' • '),
                       InkWell(
-                        onTap: (){},
+                        onTap: ()=>navigateToSignupScreen(context),
                         child: const Text('Sign up for Twitter', style: TextStyle(color: Palette.blueColor),),
                       )
                     ],

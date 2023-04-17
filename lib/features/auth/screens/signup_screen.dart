@@ -19,6 +19,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _dateController;
+  final _formKey = GlobalKey<FormState>();
 
   Future<void> showDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
@@ -49,9 +50,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _dateController.dispose();
   }
 
-  void navigateToDetailsScreen(BuildContext context){
-    if(_nameController.text.isNotEmpty && _emailController.text.isNotEmpty && _dateController.text.isNotEmpty){
-      Routemaster.of(context).push('/details-screen/${_nameController.text.trim()}/${_emailController.text.trim()}/${_dateController.text.trim()}');
+  void navigateToDetailsScreen(BuildContext context) {
+    if (_nameController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
+        _dateController.text.isNotEmpty) {
+      if(_formKey.currentState!.validate()){
+        Routemaster.of(context).push(
+            '/details-screen/${_nameController.text.trim()}/${_emailController.text.trim()}/${_dateController.text.trim()}');
+      }
     }
   }
 
@@ -87,34 +93,42 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 4,
                 ),
-                Column(
-                  children: [
-                    OutlinedTextField(
-                      label: 'Name',
-                      function: () {},
-                      controller: _nameController,
-                      maxChar: 50,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    OutlinedTextField(
-                      label: 'Email address',
-                      function: () {},
-                      controller: _emailController,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    OutlinedTextField(
-                      label: 'Date of birth',
-                      function: () {
-                        showDate(context);
-                      },
-                      readOnly: true,
-                      controller: _dateController,
-                    ),
-                  ],
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      OutlinedTextField(
+                        label: 'Name',
+                        function: () {},
+                        validate: (value) {
+                          if (value!.length < 4) {
+                            return 'Please enter your full name';
+                          }
+                        },
+                        controller: _nameController,
+                        maxChar: 50,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      OutlinedTextField(
+                        label: 'Email address',
+                        function: () {},
+                        controller: _emailController,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      OutlinedTextField(
+                        label: 'Date of birth',
+                        function: () {
+                          showDate(context);
+                        },
+                        readOnly: true,
+                        controller: _dateController,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 5.5,
@@ -127,9 +141,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: ()=>navigateToDetailsScreen(context),
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 8),
                         backgroundColor: Palette.blueColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32),
