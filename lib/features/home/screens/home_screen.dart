@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/home/drawers/home_drawer.dart';
 
@@ -57,7 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         centerTitle: true,
       ),
-      body: ,
+      body: Constants.tabScreens[_page],
       bottomNavigationBar: CupertinoTabBar(
         backgroundColor: theme.colorScheme.background,
         activeColor: theme.iconTheme.color,
@@ -66,6 +67,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         items: [
           BottomNavigationBarItem(
             icon:  Icon((_page == 0)?Icons.home : Icons.home_outlined),
+          ),
+          BottomNavigationBarItem(
+            icon:  Icon((_page == 1)?Icons.search : Icons.search_outlined),
+          ),
+          BottomNavigationBarItem(
+            icon:  Icon((_page == 2)?Icons.notifications : Icons.notifications_outlined),
+          ),
+          BottomNavigationBarItem(
+            icon:  Icon((_page == 0)?Icons.mail : Icons.mail_outlined),
           ),
         ],
       ),

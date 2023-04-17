@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-final themeProvider = StateNotifierProvider<ToggleThemeNotifier, ThemeData>((ref) {
+final themeProvider =
+    StateNotifierProvider<ToggleThemeNotifier, ThemeData>((ref) {
   return ToggleThemeNotifier();
 });
-
 
 class Palette {
   static const whiteColor = Color(0xFFFFFFFF);
@@ -55,6 +54,19 @@ class Palette {
       ),
     ),
     primaryColor: blueColor,
+    colorScheme: const ColorScheme(
+      brightness: Brightness.dark,
+      primary: Palette.blackColor,
+      onPrimary: Palette.extraExtraLightGrey,
+      secondary: Palette.darkGreyColor,
+      onSecondary: Palette.extraExtraLightGrey,
+      error: Palette.redColor,
+      onError: Palette.whiteColor,
+      background: Palette.blackColor,
+      onBackground: Palette.extraExtraLightGrey,
+      surface: Palette.blackColor,
+      onSurface: Palette.extraExtraLightGrey,
+    ),
   );
 
   static var lightModeAppTheme = ThemeData.dark().copyWith(
@@ -93,6 +105,19 @@ class Palette {
       backgroundColor: whiteColor,
     ),
     primaryColor: blueColor,
+    colorScheme: const ColorScheme(
+      brightness: Brightness.light,
+      primary: Palette.whiteColor,
+      onPrimary: Palette.blackColor,
+      secondary: Palette.extraLightGrey,
+      onSecondary: Palette.blackColor,
+      error: Palette.redColor,
+      onError: Palette.extraLightGrey,
+      background: Palette.whiteColor,
+      onBackground: Palette.blackColor,
+      surface: Palette.lightGreyColor,
+      onSurface: Palette.blackColor,
+    ),
   );
 
   static var dimDarkModeAppTheme = ThemeData.dark().copyWith(
@@ -131,6 +156,19 @@ class Palette {
       backgroundColor: darkBlueColor,
     ),
     primaryColor: blueColor,
+    colorScheme: const ColorScheme(
+      brightness: Brightness.dark,
+      primary: Palette.darkBlueColor,
+      onPrimary: Palette.extraExtraLightGrey,
+      secondary: Palette.darkBlueColor,
+      onSecondary: Palette.whiteColor,
+      error: Palette.redColor,
+      onError: Palette.whiteColor,
+      background: Palette.darkBlueColor,
+      onBackground: Palette.extraExtraLightGrey,
+      surface: Palette.darkBlueColor,
+      onSurface: Palette.whiteColor,
+    ),
   );
 }
 
@@ -140,13 +178,13 @@ class ToggleThemeNotifier extends StateNotifier<ThemeData> {
       : _mode = mode,
         super(Palette.lightsOutModeAppTheme);
 
-  void getTheme()async{
+  void getTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final theme = prefs.getString('theme');
-    if(theme == 'light'){
+    if (theme == 'light') {
       _mode = ThemeMode.light;
       state = Palette.lightModeAppTheme;
-    } else if(theme == 'dim'){
+    } else if (theme == 'dim') {
       _mode = ThemeMode.dark;
       state = Palette.dimDarkModeAppTheme;
     } else {
@@ -157,27 +195,26 @@ class ToggleThemeNotifier extends StateNotifier<ThemeData> {
 
   ThemeMode get mode => _mode;
 
-  void toggleTheme(bool dim)async{
+  void toggleTheme(bool dim) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final theme = prefs.getString('theme');
-    if(theme=='light'){
-      if(dim){
+    if (theme == 'light') {
+      if (dim) {
         _mode = ThemeMode.dark;
         state = Palette.dimDarkModeAppTheme;
         prefs.setString('theme', 'dim');
         getTheme();
-      } else{
+      } else {
         _mode = ThemeMode.dark;
         state = Palette.lightsOutModeAppTheme;
         prefs.setString('theme', 'lightsOut');
         getTheme();
       }
-    } else{
+    } else {
       _mode = ThemeMode.light;
       state = Palette.lightModeAppTheme;
       prefs.setString('theme', 'light');
       getTheme();
     }
   }
-
 }

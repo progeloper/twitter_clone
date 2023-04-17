@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter_clone/features/auth/screens/login_screen.dart';
 
 class Constants{
   static String defaultAvatar = 'https://media.idownloadblog.com/wp-content/uploads/2017/03/Twitter-new-2017-avatar-001.png';
@@ -15,4 +16,8 @@ class Constants{
   static const spaceBox50 = SizedBox(
     height: 50,
   );
+
+  static const tabScreens = <Widget>[
+    LoginScreen()
+  ];
 }
