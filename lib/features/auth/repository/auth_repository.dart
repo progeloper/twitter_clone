@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:twitter_clone/core/constants/firebase_constants.dart';
 import 'package:twitter_clone/core/failure.dart';
 import 'package:twitter_clone/core/providers/firebase_providers.dart';
 import 'package:twitter_clone/core/type_defs.dart';
@@ -23,7 +24,7 @@ class AuthRepository {
       : _auth = auth,
         _firestore = firestore;
 
-  CollectionReference get _users => _firestore.collection('collectionPath');
+  CollectionReference get _users => _firestore.collection(FirebaseConstants.usersCollection);
 
   FutureEither<model.User> signUp({
     required String name,
@@ -43,7 +44,7 @@ class AuthRepository {
       model.User user = model.User(
           email: email,
           name: name,
-          username: '${name.substring(4)}${cred.user!.uid.substring(3)}',
+          username: '${name.substring(0, 3)}${cred.user!.uid.substring(0, 2)}',
           uid: cred.user!.uid,
           displayPic: displayPic,
           banner: banner,
@@ -68,7 +69,7 @@ class AuthRepository {
     required String password,
   }) async {
     try {
-      UserCredential cred =await  _auth.signInWithEmailAndPassword(
+      UserCredential cred = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -81,8 +82,9 @@ class AuthRepository {
     }
   }
 
-  Stream<model.User> getUserData(String uid){
-    return _users.doc(uid).snapshots().map((event) => model.User.fromMap(event.data() as Map<String, dynamic>));
+  Stream<model.User> getUserData(String uid) {
+    return _users.doc(uid).snapshots().map(
+        (event) => model.User.fromMap(event.data() as Map<String, dynamic>));
   }
 
   Stream<User?> get authStateChange => _auth.authStateChanges();

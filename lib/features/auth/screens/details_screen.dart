@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 
 import '../../../core/common/widgets/outline_textfield.dart';
 import '../../../theme/palette.dart';
@@ -25,7 +26,6 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
   late TextEditingController _reenterController;
   final _formKey = GlobalKey<FormState>();
 
-
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,6 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
     _passwordController = TextEditingController();
     _reenterController = TextEditingController();
   }
-
 
   @override
   void dispose() {
@@ -93,8 +92,8 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
                         function: () {},
                         controller: _reenterController,
                         obscured: true,
-                        validate: (value){
-                          if(value != _passwordController.text){
+                        validate: (value) {
+                          if (value != _passwordController.text) {
                             return 'Please ensure both passwords match';
                           }
                           return null;
@@ -109,12 +108,21 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
                           width: MediaQuery.of(context).size.width / 3,
                           child: TextButton(
                             onPressed: () {
-                              if(_formKey.currentState!.validate()){
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('yo')));
+                              if (_formKey.currentState!.validate()) {
+                                ref
+                                    .read(authControllerProvider.notifier)
+                                    .signup(
+                                      context: context,
+                                      name: widget.name,
+                                      email: widget.email,
+                                      dob: widget.dob,
+                                      password: _passwordController.text.trim(),
+                                    );
                               }
                             },
                             style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 8),
                               backgroundColor: Palette.blueColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(32),
