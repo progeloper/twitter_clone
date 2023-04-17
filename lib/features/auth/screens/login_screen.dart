@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/common/widgets/input_text_field.dart';
 import 'package:twitter_clone/core/common/widgets/rounded_filled_button.dart';
+import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 
 import '../../../theme/palette.dart';
 
@@ -28,7 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     _passwordController = TextEditingController();
   }
 
-  void navigateToSignupScreen(BuildContext context){
+  void navigateToSignupScreen(BuildContext context) {
     Routemaster.of(context).push('/signup-screen');
   }
 
@@ -65,17 +66,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   const Text(
                     'Log in to Twitter',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
                   ),
                   const SizedBox(
                     height: 30,
                   ),
                   InputTextField(
                     controller: _emailController,
-                    label: 'Email or Username',
+                    label: 'Email',
                   ),
                   const SizedBox(
                     height: 20,
@@ -88,7 +86,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  RoundedFilledButton(function: (){}, label: 'Log in',),
+                  RoundedFilledButton(
+                    function: () {
+                      ref.read(authControllerProvider.notifier).login(context: context, email: _emailController.text.trim(), password: _passwordController.text.trim());
+                    },
+                    label: 'Log in',
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -97,13 +100,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       InkWell(
-                        onTap: (){},
-                        child: const Text('Forgot password?', style: TextStyle(color: Palette.blueColor),),
+                        onTap: () {},
+                        child: const Text(
+                          'Forgot password?',
+                          style: TextStyle(color: Palette.blueColor),
+                        ),
                       ),
                       const Text(' • '),
                       InkWell(
-                        onTap: ()=>navigateToSignupScreen(context),
-                        child: const Text('Sign up for Twitter', style: TextStyle(color: Palette.blueColor),),
+                        onTap: () => navigateToSignupScreen(context),
+                        child: const Text(
+                          'Sign up for Twitter',
+                          style: TextStyle(color: Palette.blueColor),
+                        ),
                       )
                     ],
                   )

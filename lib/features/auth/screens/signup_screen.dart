@@ -16,7 +16,8 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  late TextEditingController _nameController;
+  late TextEditingController _firstNameController;
+  late TextEditingController _surnameController;
   late TextEditingController _emailController;
   late TextEditingController _dateController;
   final _formKey = GlobalKey<FormState>();
@@ -37,7 +38,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   void initState() {
     super.initState();
 
-    _nameController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _surnameController = TextEditingController();
     _emailController = TextEditingController();
     _dateController = TextEditingController();
   }
@@ -45,18 +47,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   void dispose() {
     super.dispose();
-    _nameController.dispose();
+    _firstNameController.dispose();
+    _surnameController.dispose();
     _emailController.dispose();
     _dateController.dispose();
   }
 
   void navigateToDetailsScreen(BuildContext context) {
-    if (_nameController.text.isNotEmpty &&
+    if (_firstNameController.text.isNotEmpty &&
         _emailController.text.isNotEmpty &&
         _dateController.text.isNotEmpty) {
       if(_formKey.currentState!.validate()){
         Routemaster.of(context).push(
-            '/details-screen/${_nameController.text.trim()}/${_emailController.text.trim()}/${_dateController.text.trim()}');
+            '/details-screen/${_firstNameController.text.trim()}${_surnameController.text.trim()}/${_emailController.text.trim()}/${_dateController.text.trim()}');
       }
     }
   }
@@ -98,15 +101,29 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: Column(
                     children: [
                       OutlinedTextField(
-                        label: 'Name',
+                        label: 'First name',
                         function: () {},
                         validate: (value) {
                           if (value!.length < 4) {
                             return 'Please enter your full name';
                           }
                         },
-                        controller: _nameController,
-                        maxChar: 50,
+                        controller: _firstNameController,
+                        maxChar: 25,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      OutlinedTextField(
+                        label: 'Surname',
+                        function: () {},
+                        validate: (value) {
+                          if (value!.length < 4) {
+                            return 'Please enter your full name';
+                          }
+                        },
+                        controller: _surnameController,
+                        maxChar: 25,
                       ),
                       const SizedBox(
                         height: 10,
@@ -131,7 +148,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 5.5,
+                  height: MediaQuery.of(context).size.height / 17,
                 ),
                 const Divider(
                   thickness: 1.0,

@@ -10,8 +10,8 @@ class User {
   final String url;
   final dynamic joined;
   final String dob;
-  final List<String> followers;
-  final List<String> following;
+  final List followers;
+  final List following;
 
 //<editor-fold desc="Data Methods">
   const User({
@@ -40,10 +40,10 @@ class User {
     String? bio,
     String? location,
     String? url,
-    dynamic? joined,
+    dynamic joined,
     String? dob,
-    List<String>? followers,
-    List<String>? following,
+    List? followers,
+    List? following,
   }) {
     return User(
       email: email ?? this.email,
@@ -93,8 +93,8 @@ class User {
       url: map['url'] as String,
       joined: map['joined'] as dynamic,
       dob: map['dob'] as String,
-      followers: map['followers'] as List<String>,
-      following: map['following'] as List<String>,
+      followers: map['followers'] as List,
+      following: map['following'] as List,
     );
   }
 
