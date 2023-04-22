@@ -8,6 +8,7 @@ class Tweet{
   final String? parentId;
   final bool isThread;
   final String postedAt;
+  final String profilePic;
 
 //<editor-fold desc="Data Methods">
   const Tweet({
@@ -20,8 +21,8 @@ class Tweet{
     this.parentId,
     required this.isThread,
     required this.postedAt,
+    required this.profilePic,
   });
-
 
 
   Tweet copyWith({
@@ -34,6 +35,7 @@ class Tweet{
     String? parentId,
     bool? isThread,
     String? postedAt,
+    String? profilePic,
   }) {
     return Tweet(
       tweet: tweet ?? this.tweet,
@@ -45,6 +47,7 @@ class Tweet{
       parentId: parentId ?? this.parentId,
       isThread: isThread ?? this.isThread,
       postedAt: postedAt ?? this.postedAt,
+      profilePic: profilePic ?? this.profilePic,
     );
   }
 
@@ -59,6 +62,7 @@ class Tweet{
       'parentId': this.parentId,
       'isThread': this.isThread,
       'postedAt': this.postedAt,
+      'profilePic': this.profilePic,
     };
   }
 
@@ -73,6 +77,7 @@ class Tweet{
       parentId: map['parentId'] as String,
       isThread: map['isThread'] as bool,
       postedAt: map['postedAt'] as String,
+      profilePic: map['profilePic'] as String,
     );
   }
 

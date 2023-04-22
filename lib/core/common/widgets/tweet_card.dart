@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/models/tweet.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
+import '../../../features/auth/controller/auth_controller.dart';
+import '../../../models/user.dart';
+
 class TweetCard extends ConsumerWidget {
   final Tweet tweet;
   const TweetCard({
@@ -12,9 +15,10 @@ class TweetCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: const BoxDecoration(
         border: Border(
           top: BorderSide(color: Palette.darkGreyColor, width: 0.5),
@@ -24,7 +28,10 @@ class TweetCard extends ConsumerWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-
+          CircleAvatar(
+            backgroundImage: NetworkImage(tweet.profilePic),
+            radius: 30,
+          ),
         ],
       ),
     );
