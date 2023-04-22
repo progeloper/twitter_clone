@@ -2,42 +2,107 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/core/common/widgets/rounded_filled_button.dart';
 
-class CreateTweet extends ConsumerWidget {
-  const CreateTweet({
+import '../../../theme/palette.dart';
+
+
+class CreateTweetScreen extends ConsumerStatefulWidget {
+  const CreateTweetScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _CreateTweetScreenState();
+}
+
+class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
+  late TextEditingController _controller;
+  bool canTweet = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController()..addListener(() {
+      if(_controller.text.isNotEmpty){
+        setState(() {
+          canTweet = true;
+        });
+      } else{
+        setState(() {
+          canTweet = false;
+        });
+      }
+    });
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.close),
-                ),
-                Expanded(child: Container()),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width/4,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: RoundedFilledButton(function: () {}, label: 'Tweet'),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.close),
+                      ),
+                      Expanded(child: Container()),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width/4,
+                        child: canTweet?IconButton(
+                          onPressed: () {},
+                          icon: RoundedFilledButton(function: () {}, label: 'Tweet'),
+                        ) : Container(),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            )
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextField(
+                      controller: _controller,
+                      maxLength: 256,
+                      maxLines: 8,
+                      decoration: InputDecoration(
+                        filled: false,
+                        hintText: 'What\'s happening?',
+                        hintStyle: TextStyle(
+                          color: Palette.darkGreyColor,
+                          fontSize: 18,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height/3,
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+
