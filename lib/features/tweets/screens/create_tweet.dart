@@ -52,104 +52,115 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   void selectImage() async {
     final result = await pickImage();
     if (result != null) {
-      imagePost = File(result.files.first.path!);
+      setState(() {
+        imagePost = File(result.files.first.path!);
+      });
     }
+  }
+
+  void selectGif() async{
+    setState(() async {
+      gif = await GiphyPicker.pickGif(
+          context: context, apiKey: ExternalKeys.giphyKey);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.close),
-                  ),
-                  Expanded(child: Container()),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 4,
-                    child: canTweet
-                        ? IconButton(
-                            onPressed: () {},
-                            icon: RoundedFilledButton(
-                                function: () {}, label: 'Tweet'),
-                          )
-                        : Container(),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: TextField(
-                  controller: _controller,
-                  maxLength: 256,
-                  maxLines: 8,
-                  decoration: const InputDecoration(
-                    filled: false,
-                    hintText: 'What\'s happening?',
-                    hintStyle: TextStyle(
-                      color: Palette.darkGreyColor,
-                      fontSize: 18,
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.close),
                     ),
-                    border: InputBorder.none,
+                    Expanded(child: Container()),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      child: canTweet
+                          ? IconButton(
+                              onPressed: () {},
+                              icon: RoundedFilledButton(
+                                  function: () {}, label: 'Tweet'),
+                            )
+                          : Container(),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextField(
+                    controller: _controller,
+                    maxLength: 256,
+                    maxLines: 8,
+                    decoration: const InputDecoration(
+                      filled: false,
+                      hintText: 'What\'s happening?',
+                      hintStyle: TextStyle(
+                        color: Palette.darkGreyColor,
+                        fontSize: 18,
+                      ),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: (imagePost == null)
-                    ? (gif == null)
-                        ? Container()
-                        : AspectRatio(
-                            aspectRatio: 487 / 451,
-                            child: Image.network(gif!.images.original!.url!),
-                          )
-                    : AspectRatio(
-                        aspectRatio: 487 / 451,
-                        child: Image.file(imagePost!),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: (imagePost == null)
+                      ? (gif == null)
+                          ? Container()
+                          : AspectRatio(
+                              aspectRatio: 487 / 451,
+                              child: Image.network(gif!.images.original!.url!),
+                            )
+                      : AspectRatio(
+                          aspectRatio: 487 / 451,
+                          child: Image.file(imagePost!),
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    IconButton(
+                      onPressed: () => selectImage(),
+                      icon: Icon(
+                        Icons.photo_outlined,
+                        color: Palette.blueColor,
+                        size: 40,
                       ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.photo_outlined,
-                      color: Palette.blueColor,
                     ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      gif = await GiphyPicker.pickGif(context: context, apiKey: ExternalKeys.giphyKey);
-                    },
-                    icon: Icon(
-                      Icons.gif_box_outlined,
-                      color: Palette.blueColor,
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-                ],
-              )
-            ],
+                    IconButton(
+                      onPressed: () => selectGif(),
+                      icon: Icon(
+                        Icons.gif_box_outlined,
+                        color: Palette.blueColor,
+                        size: 40,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
