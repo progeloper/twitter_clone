@@ -1,24 +1,27 @@
 class Tweet{
   final String tweet;
-  final String imageLink;
+  final String? imageLink;
   final String tweetId;
   final String uid;
   final List likes;
   final List retweets;
   final String? parentId;
+  final bool isThread;
   final String postedAt;
 
 //<editor-fold desc="Data Methods">
   const Tweet({
     required this.tweet,
-    required this.imageLink,
+    this.imageLink,
     required this.tweetId,
     required this.uid,
     required this.likes,
     required this.retweets,
     this.parentId,
+    required this.isThread,
     required this.postedAt,
   });
+
 
 
   Tweet copyWith({
@@ -29,6 +32,7 @@ class Tweet{
     List? likes,
     List? retweets,
     String? parentId,
+    bool? isThread,
     String? postedAt,
   }) {
     return Tweet(
@@ -39,6 +43,7 @@ class Tweet{
       likes: likes ?? this.likes,
       retweets: retweets ?? this.retweets,
       parentId: parentId ?? this.parentId,
+      isThread: isThread ?? this.isThread,
       postedAt: postedAt ?? this.postedAt,
     );
   }
@@ -52,6 +57,7 @@ class Tweet{
       'likes': this.likes,
       'retweets': this.retweets,
       'parentId': this.parentId,
+      'isThread': this.isThread,
       'postedAt': this.postedAt,
     };
   }
@@ -65,6 +71,7 @@ class Tweet{
       likes: map['likes'] as List,
       retweets: map['retweets'] as List,
       parentId: map['parentId'] as String,
+      isThread: map['isThread'] as bool,
       postedAt: map['postedAt'] as String,
     );
   }
