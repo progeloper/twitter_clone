@@ -21,7 +21,7 @@ class Constants{
   );
 
   static const tabScreens = <Widget>[
-    Center(child: TweetCard(tweet: Tweet(tweet: 'tweet', tweetId: 'vefgermverjgnejrn', uid: 'GTuSFPg9sSeu0aH2e7WvUDvHzI52', likes: [], retweets: [], isThread: false, postedAt: '17 April 2023', profilePic: 'https://media.idownloadblog.com/wp-content/uploads/2017/03/Twitter-new-2017-avatar-001.png'),),),
+    Center(child: TweetCard(tweet: Tweet(tweet: 'this is a test tweet, not much is being said but at least it works', tweetId: 'vefgermverjgnejrn', uid: 'GTuSFPg9sSeu0aH2e7WvUDvHzI52', likes: [], retweets: [], isThread: false, postedAt: '17 April 2023', profilePic: 'https://media.idownloadblog.com/wp-content/uploads/2017/03/Twitter-new-2017-avatar-001.png', username: 'mayeaux', name: 'Mayo', commentCount: 0),),),
     Center(child: Text('feed'),),
     Center(child: Text('search'),),
     Center(child: Text('notifications'),),

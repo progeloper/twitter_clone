@@ -9,6 +9,9 @@ class Tweet{
   final bool isThread;
   final String postedAt;
   final String profilePic;
+  final String username;
+  final String name;
+  final int commentCount;
 
 //<editor-fold desc="Data Methods">
   const Tweet({
@@ -22,8 +25,10 @@ class Tweet{
     required this.isThread,
     required this.postedAt,
     required this.profilePic,
+    required this.username,
+    required this.name,
+    required this.commentCount,
   });
-
 
   Tweet copyWith({
     String? tweet,
@@ -36,6 +41,9 @@ class Tweet{
     bool? isThread,
     String? postedAt,
     String? profilePic,
+    String? username,
+    String? name,
+    int? commentCount,
   }) {
     return Tweet(
       tweet: tweet ?? this.tweet,
@@ -48,6 +56,9 @@ class Tweet{
       isThread: isThread ?? this.isThread,
       postedAt: postedAt ?? this.postedAt,
       profilePic: profilePic ?? this.profilePic,
+      username: username ?? this.username,
+      name: name ?? this.name,
+      commentCount: commentCount ?? this.commentCount,
     );
   }
 
@@ -63,6 +74,9 @@ class Tweet{
       'isThread': this.isThread,
       'postedAt': this.postedAt,
       'profilePic': this.profilePic,
+      'username': this.username,
+      'name': this.name,
+      'commentCount': this.commentCount,
     };
   }
 
@@ -78,6 +92,9 @@ class Tweet{
       isThread: map['isThread'] as bool,
       postedAt: map['postedAt'] as String,
       profilePic: map['profilePic'] as String,
+      username: map['username'] as String,
+      name: map['name'] as String,
+      commentCount: map['commentCount'] as int,
     );
   }
 
