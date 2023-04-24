@@ -1,12 +1,15 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:giphy_picker/giphy_picker.dart';
 import 'package:twitter_clone/core/common/utils.dart';
 import 'package:twitter_clone/core/common/widgets/rounded_filled_button.dart';
 import 'package:twitter_clone/core/constants/external_apiKeys.dart';
+import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
+import 'package:twitter_clone/features/tweets/controller/tweet_controller.dart';
+import 'package:twitter_clone/models/user.dart';
 
 import '../../../theme/palette.dart';
 
@@ -58,15 +61,25 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     }
   }
 
-  void selectGif() async{
+  void uploadTweet(BuildContext context, WidgetRef ref, User user) {
+    ref.read(tweetControllerProvider.notifier).uploadTweet(
+        tweet: _controller.text.trim(), user: user, context: context);
+  }
+
+  void selectGif() async {
     setState(() async {
       gif = await GiphyPicker.pickGif(
           context: context, apiKey: ExternalKeys.giphyKey);
     });
   }
 
+  void goBack(){
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = ref.read(userProvider);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -82,7 +95,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: ()=>goBack(),
                       icon: const Icon(Icons.close),
                     ),
                     Expanded(child: Container()),
@@ -90,7 +103,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                       width: MediaQuery.of(context).size.width / 4,
                       child: canTweet
                           ? IconButton(
-                              onPressed: () {},
+                              onPressed: () => uploadTweet(context, ref, user!),
                               icon: RoundedFilledButton(
                                   function: () {}, label: 'Tweet'),
                             )
