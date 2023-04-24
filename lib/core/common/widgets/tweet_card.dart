@@ -96,10 +96,12 @@ class TweetCard extends ConsumerWidget {
                 Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         tweet.tweet,
                       ),
+                      const SizedBox(height: 5,),
                       if (tweet.imageLink != null)
                         Container(
                           decoration: BoxDecoration(

@@ -19,9 +19,19 @@ final tweetControllerProvider =
   return TweetControllerNotifier(repo: repo, storageRepo: storageRepo);
 });
 
-final fetchUserFeedProvider = StreamProvider.family((ref, List<String> tweeters){
+final fetchUserFeedProvider = StreamProvider.family((ref, List<User> tweeters){
   final controller = ref.read(tweetControllerProvider.notifier);
   return controller.fetchUserFeed(tweeters);
+});
+
+final getUsersFollowingProvider = StreamProvider.family((ref, String id){
+  final controller = ref.read(tweetControllerProvider.notifier);
+  return controller.getUsersFollowing(id);
+});
+
+final getUsersFollowersProvider = StreamProvider.family((ref, String id){
+  final controller = ref.read(tweetControllerProvider.notifier);
+  return controller.getUsersFollowers(id);
 });
 
 class TweetControllerNotifier extends StateNotifier<bool> {
@@ -50,7 +60,6 @@ class TweetControllerNotifier extends StateNotifier<bool> {
         uid: user.uid,
         likes: [],
         retweets: [],
-        isThread: false,
         imageLink: imageLink,
         postedAt: postedAt,
         profilePic: user.displayPic,
@@ -64,11 +73,18 @@ class TweetControllerNotifier extends StateNotifier<bool> {
         (r) => showSnackBar(context, 'Tweet sent'));
   }
 
-  Stream<List<Tweet>> fetchUserFeed(List<String> tweeters){
+  Stream<List<Tweet>> fetchUserFeed(List<User> tweeters){
     if (tweeters.isNotEmpty){
       return _repo.fetchUserFeed(tweeters);
     }
     return Stream.value([]);
   }
 
+  Stream<List<User>> getUsersFollowing(String id) {
+    return _repo.getUsersFollowing(id);
+  }
+
+  Stream<List<User>> getUsersFollowers(String id){
+    return _repo.getUsersFollowers(id);
+  }
 }

@@ -5,8 +5,6 @@ class Tweet{
   final String uid;
   final List likes;
   final List retweets;
-  final String? parentId;
-  final bool isThread;
   final String postedAt;
   final String profilePic;
   final String username;
@@ -21,8 +19,6 @@ class Tweet{
     required this.uid,
     required this.likes,
     required this.retweets,
-    this.parentId,
-    required this.isThread,
     required this.postedAt,
     required this.profilePic,
     required this.username,
@@ -37,8 +33,6 @@ class Tweet{
     String? uid,
     List? likes,
     List? retweets,
-    String? parentId,
-    bool? isThread,
     String? postedAt,
     String? profilePic,
     String? username,
@@ -52,8 +46,6 @@ class Tweet{
       uid: uid ?? this.uid,
       likes: likes ?? this.likes,
       retweets: retweets ?? this.retweets,
-      parentId: parentId ?? this.parentId,
-      isThread: isThread ?? this.isThread,
       postedAt: postedAt ?? this.postedAt,
       profilePic: profilePic ?? this.profilePic,
       username: username ?? this.username,
@@ -70,8 +62,6 @@ class Tweet{
       'uid': this.uid,
       'likes': this.likes,
       'retweets': this.retweets,
-      'parentId': this.parentId,
-      'isThread': this.isThread,
       'postedAt': this.postedAt,
       'profilePic': this.profilePic,
       'username': this.username,
@@ -88,8 +78,6 @@ class Tweet{
       uid: map['uid'] as String,
       likes: map['likes'] as List,
       retweets: map['retweets'] as List,
-      parentId: map['parentId'] as String,
-      isThread: map['isThread'] as bool,
       postedAt: map['postedAt'] as String,
       profilePic: map['profilePic'] as String,
       username: map['username'] as String,

@@ -34,21 +34,28 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
           FontAwesomeIcons.paperPlane,
         ),
       ),
-      body: ref
-          .watch(fetchUserFeedProvider(user!.following as List<String>))
-          .when(
-              data: (tweets) {
-                return ListView.builder(
-                  itemCount: tweets.length,
-                  itemBuilder: (context, index){
-                    final tweet = tweets[index];
-                    return TweetCard(tweet: tweet);
-                  },
-                );
-              },
-              error: (error, StackTrace) =>
-                  Center(child: ErrorText(error: error.toString())),
-              loading: () => Center(child: Loader())),
+      body: ref.watch(getUsersFollowingProvider(user!.uid)).when(
+          data: (tweeters) {
+            return ref.watch(fetchUserFeedProvider(tweeters)).when(
+                data: (tweets) {
+                  return ListView.builder(
+                    itemCount: tweets.length,
+                    itemBuilder: (context, index) {
+                      final tweet = tweets[index];
+                      print(tweet.name);
+                      return TweetCard(tweet: tweet);
+                    },
+                  );
+                },
+                error: (error, stackTrace) {
+                  print(stackTrace.toString());
+                  return Center(child: ErrorText(error: error.toString()));
+                },
+                loading: () => const Center(child: Loader()));
+          },
+          error: (error, StackTrace) =>
+              Center(child: ErrorText(error: error.toString())),
+          loading: () => const Center(child: Loader())),
     );
   }
 }
