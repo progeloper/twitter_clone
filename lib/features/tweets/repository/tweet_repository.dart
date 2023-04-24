@@ -22,17 +22,26 @@ class TweetRepository {
       : _auth = auth,
         _firestore = firestore;
 
-  CollectionReference get _tweets => _firestore.collection(FirebaseConstants.tweetsCollection);
+  CollectionReference get _tweets =>
+      _firestore.collection(FirebaseConstants.tweetsCollection);
 
-  FutureVoid uploadTweet(Tweet tweet)async{
-    try{
+  FutureVoid uploadTweet(Tweet tweet) async {
+    try {
       return right(_tweets.doc(tweet.tweetId).set(tweet.toMap()));
-    } on FirebaseException catch(e){
+    } on FirebaseException catch (e) {
       throw e.message!;
-    } catch (e){
+    } catch (e) {
       return left(Failure(e.toString()));
     }
   }
 
-
+  Stream<List<Tweet>> fetchUserFeed(List<String> tweeters) {
+    return _tweets
+        .where('uid', whereIn: tweeters)
+        .orderBy('postedAt', descending: true)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => Tweet.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
+  }
 }

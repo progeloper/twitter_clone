@@ -62,8 +62,13 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   }
 
   void uploadTweet(BuildContext context, WidgetRef ref, User user) {
-    ref.read(tweetControllerProvider.notifier).uploadTweet(
-        tweet: _controller.text.trim(), user: user, context: context);
+    if (_controller.text.isNotEmpty || imagePost != null) {
+      ref.read(tweetControllerProvider.notifier).uploadTweet(
+          tweet: _controller.text.trim(),
+          user: user,
+          context: context,
+          file: imagePost);
+    }
   }
 
   void selectGif() async {
@@ -73,7 +78,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
     });
   }
 
-  void goBack(){
+  void goBack() {
     Navigator.of(context).pop();
   }
 
@@ -95,7 +100,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     IconButton(
-                      onPressed: ()=>goBack(),
+                      onPressed: () => goBack(),
                       icon: const Icon(Icons.close),
                     ),
                     Expanded(child: Container()),
@@ -103,9 +108,13 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                       width: MediaQuery.of(context).size.width / 4,
                       child: canTweet
                           ? IconButton(
-                              onPressed: () => uploadTweet(context, ref, user!),
+                              onPressed: () {},
                               icon: RoundedFilledButton(
-                                  function: () {}, label: 'Tweet'),
+                                  function: () {
+                                    uploadTweet(context, ref, user!);
+                                    Navigator.pop(context);
+                                  },
+                                  label: 'Tweet'),
                             )
                           : Container(),
                     ),
