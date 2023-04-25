@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/features/tweets/controller/tweet_controller.dart';
+import 'package:twitter_clone/features/tweets/screens/create_comment_screen.dart';
 import 'package:twitter_clone/features/tweets/screens/tweet_screen.dart';
 import 'package:twitter_clone/models/tweet.dart';
 import 'package:twitter_clone/theme/palette.dart';
@@ -8,23 +10,38 @@ import 'package:twitter_clone/theme/palette.dart';
 import '../../../features/auth/controller/auth_controller.dart';
 import '../../../models/user.dart';
 
-class TweetCard extends ConsumerWidget {
+class TweetCard extends ConsumerStatefulWidget {
   final Tweet tweet;
   const TweetCard({
     Key? key,
     required this.tweet,
   }) : super(key: key);
+  @override
+  ConsumerState createState() => _TweetCardState();
+}
 
-  Future<User> getTweeter(WidgetRef ref) async {
-    final tweeter = await ref
-        .read(authControllerProvider.notifier)
-        .getUserData(tweet.uid)
-        .first;
-    return tweeter;
+class _TweetCardState extends ConsumerState<TweetCard> {
+
+  void likeTweet(BuildContext context, WidgetRef ref, String userId) async {
+    ref
+        .read(tweetControllerProvider.notifier)
+        .likeTweet(widget.tweet, userId, context);
+    setState(() {});
+  }
+
+  void retweetTweet(BuildContext context, WidgetRef ref, String userId) async {
+    ref
+        .read(tweetControllerProvider.notifier)
+        .retweetTweet(widget.tweet, userId, context);
+    setState(() {});
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final theme = ref.watch(themeProvider);
+    final user = ref.read(userProvider);
+    final tweet = widget.tweet;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -141,8 +158,12 @@ class TweetCard extends ConsumerWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                onPressed: () {},
-                                icon: FaIcon(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          CreateCommentScreen(tweet: tweet)));
+                                },
+                                icon: const FaIcon(
                                   FontAwesomeIcons.comment,
                                   color: Palette.darkGreyColor,
                                 ),
@@ -160,11 +181,16 @@ class TweetCard extends ConsumerWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                onPressed: () {},
-                                icon: FaIcon(
-                                  FontAwesomeIcons.retweet,
-                                  color: Palette.darkGreyColor,
-                                ),
+                                onPressed: ()=>retweetTweet(context, ref, user.uid),
+                                icon: (tweet.retweets.contains(user!.uid))
+                                    ? const FaIcon(
+                                        FontAwesomeIcons.retweet,
+                                        color: Palette.greenColor,
+                                      )
+                                    : const FaIcon(
+                                        FontAwesomeIcons.retweet,
+                                        color: Palette.darkGreyColor,
+                                      ),
                               ),
                               Text(
                                 tweet.retweets.length.toString(),
@@ -179,11 +205,17 @@ class TweetCard extends ConsumerWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                onPressed: () {},
-                                icon: FaIcon(
-                                  FontAwesomeIcons.heart,
-                                  color: Palette.darkGreyColor,
-                                ),
+                                onPressed: () =>
+                                    likeTweet(context, ref, user.uid),
+                                icon: (tweet.likes.contains(user!.uid))
+                                    ? FaIcon(
+                                        FontAwesomeIcons.solidHeart,
+                                        color: Palette.redColor,
+                                      )
+                                    : FaIcon(
+                                        FontAwesomeIcons.heart,
+                                        color: Palette.darkGreyColor,
+                                      ),
                               ),
                               Text(
                                 tweet.likes.length.toString(),

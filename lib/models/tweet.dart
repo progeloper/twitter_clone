@@ -73,7 +73,7 @@ class Tweet{
   factory Tweet.fromMap(Map<String, dynamic> map) {
     return Tweet(
       tweet: map['tweet'] as String,
-      imageLink: map['imageLink'] as String,
+      imageLink: map['imageLink'] as String?,
       tweetId: map['tweetId'] as String,
       uid: map['uid'] as String,
       likes: map['likes'] as List,

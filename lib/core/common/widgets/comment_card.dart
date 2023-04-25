@@ -5,27 +5,50 @@ import 'package:twitter_clone/features/tweets/screens/create_tweet_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
 import '../../../features/auth/controller/auth_controller.dart';
+import '../../../features/tweets/controller/tweet_controller.dart';
 import '../../../models/comment.dart';
 import '../../../models/user.dart';
 
-class CommentCard extends ConsumerWidget {
+
+class CommentCard extends ConsumerStatefulWidget {
   final Comment comment;
   const CommentCard({
     Key? key,
     required this.comment,
   }) : super(key: key);
 
+  @override
+  ConsumerState createState() => _CommentCardState();
+}
+
+class _CommentCardState extends ConsumerState<CommentCard> {
   Future<User> getTweeter(WidgetRef ref) async {
     final tweeter = await ref
         .read(authControllerProvider.notifier)
-        .getUserData(comment.uid)
+        .getUserData(widget.comment.uid)
         .first;
     return tweeter;
   }
 
+  void likeComment(BuildContext context, WidgetRef ref, String userId) async {
+    ref
+        .read(tweetControllerProvider.notifier)
+        .likeComment(widget.comment, userId, context);
+    setState(() {});
+  }
+
+  void retweetComment(BuildContext context, WidgetRef ref, String userId) async {
+    ref
+        .read(tweetControllerProvider.notifier)
+        .retweetComment(widget.comment, userId, context);
+    setState(() {});
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
+    final comment = widget.comment;
+    final user = ref.read(userProvider);
 
     return Container(
       width: double.infinity,
@@ -143,10 +166,15 @@ class CommentCard extends ConsumerWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: FaIcon(
+                              onPressed: ()=>retweetComment(context, ref, user.uid),
+                              icon: (comment.retweets.contains(user!.uid))
+                                  ? FaIcon(
                                 FontAwesomeIcons.retweet,
-                                color: theme.colorScheme.secondary,
+                                color: Palette.greenColor,
+                              )
+                                  : FaIcon(
+                                FontAwesomeIcons.retweet,
+                                color: Palette.darkGreyColor,
                               ),
                             ),
                             Text(
@@ -162,10 +190,16 @@ class CommentCard extends ConsumerWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: () {},
-                              icon: FaIcon(
+                              onPressed: () =>
+                                  likeComment(context, ref, user.uid),
+                              icon: (comment.likes.contains(user!.uid))
+                                  ? FaIcon(
+                                FontAwesomeIcons.solidHeart,
+                                color: Palette.redColor,
+                              )
+                                  : FaIcon(
                                 FontAwesomeIcons.heart,
-                                color: theme.colorScheme.secondary,
+                                color: Palette.darkGreyColor,
                               ),
                             ),
                             Text(
@@ -196,3 +230,5 @@ class CommentCard extends ConsumerWidget {
     );
   }
 }
+
+

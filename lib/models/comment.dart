@@ -65,7 +65,7 @@ class Comment {
 
   Map<String, dynamic> toMap() {
     return {
-      'tweet': this.comment,
+      'comment': this.comment,
       'imageLink': this.imageLink,
       'commentId': this.commentId,
       'uid': this.uid,
@@ -84,7 +84,7 @@ class Comment {
   factory Comment.fromMap(Map<String, dynamic> map) {
     return Comment(
       comment: map['comment'] as String,
-      imageLink: map['imageLink'] as String,
+      imageLink: map['imageLink'] as String?,
       commentId: map['commentId'] as String,
       uid: map['uid'] as String,
       likes: map['likes'] as List,

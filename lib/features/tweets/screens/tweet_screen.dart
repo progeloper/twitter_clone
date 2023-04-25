@@ -41,6 +41,20 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
     Navigator.pop(context);
   }
 
+  void likeTweet(BuildContext context, WidgetRef ref, String userId) async {
+    ref
+        .read(tweetControllerProvider.notifier)
+        .likeTweet(widget.tweet, userId, context);
+    setState(() {});
+  }
+
+  void retweetTweet(BuildContext context, WidgetRef ref, String userId) async {
+    ref
+        .read(tweetControllerProvider.notifier)
+        .retweetTweet(widget.tweet, userId, context);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.read(userProvider);
@@ -129,7 +143,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                               children: [
                                 RichText(
                                   text: TextSpan(
-                                    text: '${widget.tweet.name}',
+                                    text: widget.tweet.name,
                                     style: const TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.w600,
@@ -290,29 +304,29 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                         color: theme.colorScheme.secondary,
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: FaIcon(
-                            FontAwesomeIcons.retweet,
-                            color: theme.colorScheme.secondary,
-                          ),
-                        ),
-                      ],
+                    IconButton(
+                      onPressed: () => retweetTweet(context, ref, user.uid),
+                      icon: (widget.tweet.retweets.contains(user!.uid))
+                          ? const FaIcon(
+                              FontAwesomeIcons.retweet,
+                              color: Palette.greenColor,
+                            )
+                          : const FaIcon(
+                              FontAwesomeIcons.retweet,
+                              color: Palette.darkGreyColor,
+                            ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: FaIcon(
-                            FontAwesomeIcons.heart,
-                            color: theme.colorScheme.secondary,
-                          ),
-                        ),
-                      ],
+                    IconButton(
+                      onPressed: () => likeTweet(context, ref, user.uid),
+                      icon: (widget.tweet.likes.contains(user.uid))
+                          ? const FaIcon(
+                              FontAwesomeIcons.solidHeart,
+                              color: Palette.redColor,
+                            )
+                          : const FaIcon(
+                              FontAwesomeIcons.heart,
+                              color: Palette.darkGreyColor,
+                            ),
                     ),
                     IconButton(
                       onPressed: () {},
@@ -323,21 +337,30 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                     ),
                   ],
                 ),
+                Divider(
+                  color: theme.colorScheme.secondary,
+                  thickness: 1.0,
+                ),
                 SizedBox(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height,
+                  height: 800,
                   child: ref
                       .watch(fetchTweetCommentsProvider(widget.tweet.tweetId))
                       .when(
-                        data: (comments){
-                          return ListView.builder(itemCount: comments.length,itemBuilder: (context, index){
-                            final comment = comments[index];
-                            return CommentCard(comment: comment);
-                          });
+                        data: (comments) {
+                          return ListView.builder(
+                              itemCount: comments.length,
+                              itemBuilder: (context, index) {
+                                final comment = comments[index];
+                                return CommentCard(comment: comment);
+                              });
                         },
-                        error: (error, stackTrace) => Center(
-                          child: ErrorText(error: error.toString()),
-                        ),
+                        error: (error, stackTrace) {
+                          print(stackTrace.toString());
+                          return Center(
+                            child: ErrorText(error: error.toString()),
+                          );
+                        },
                         loading: () => const Center(child: Loader()),
                       ),
                 ),

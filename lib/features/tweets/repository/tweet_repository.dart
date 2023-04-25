@@ -46,7 +46,10 @@ class TweetRepository {
 
   FutureVoid uploadComment(Comment comment) async {
     try {
-      return right(_tweets.doc(comment.commentId).set(comment.toMap()));
+      _tweets.doc(comment.parentId).update({
+        'commentCount' : FieldValue.increment(1),
+      });
+      return right(_comments.doc(comment.commentId).set(comment.toMap()));
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -66,7 +69,7 @@ class TweetRepository {
 
   Stream<List<Comment>> fetchTweetComments(String tweetId) {
     return _comments
-        .where('parenId', isEqualTo: tweetId)
+        .where('parentId', isEqualTo: tweetId)
         .orderBy('postedAt', descending: true)
         .snapshots()
         .map((event) => event.docs
@@ -98,6 +101,78 @@ class TweetRepository {
       }
       return users;
     });
+  }
+
+  FutureVoid likeTweet(Tweet tweet, String likerId)async{
+    try{
+      if(!tweet.likes.contains(likerId)) {
+        return right(await _tweets.doc(tweet.tweetId).update({
+          'likes': FieldValue.arrayUnion([likerId]),
+        }));
+      }else{
+        return right(await _tweets.doc(tweet.tweetId).update({
+          'likes': FieldValue.arrayRemove([likerId]),
+        }));
+      }
+    }on FirebaseException catch (e){
+      throw e.message!;
+    } catch (e){
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid retweetTweet(Tweet tweet, String userId)async{
+    try{
+      if(!tweet.retweets.contains(userId)) {
+        return right(await _tweets.doc(tweet.tweetId).update({
+          'retweets': FieldValue.arrayUnion([userId]),
+        }));
+      }else{
+        return right(await _tweets.doc(tweet.tweetId).update({
+          'retweets': FieldValue.arrayRemove([userId]),
+        }));
+      }
+    }on FirebaseException catch (e){
+      throw e.message!;
+    } catch (e){
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid likeComment(Comment comment, String likerId)async{
+    try{
+      if(!comment.likes.contains(likerId)) {
+        return right(await _comments.doc(comment.commentId).update({
+          'likes': FieldValue.arrayUnion([likerId]),
+        }));
+      }else{
+        return right(await _comments.doc(comment.commentId).update({
+          'likes': FieldValue.arrayRemove([likerId]),
+        }));
+      }
+    }on FirebaseException catch (e){
+      throw e.message!;
+    } catch (e){
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid retweetComment(Comment comment, String userId)async{
+    try{
+      if(!comment.retweets.contains(userId)) {
+        return right(await _comments.doc(comment.commentId).update({
+          'retweets': FieldValue.arrayUnion([userId]),
+        }));
+      }else{
+        return right(await _comments.doc(comment.commentId).update({
+          'retweets': FieldValue.arrayRemove([userId]),
+        }));
+      }
+    }on FirebaseException catch (e){
+      throw e.message!;
+    } catch (e){
+      return left(Failure(e.toString()));
+    }
   }
 
   Stream<Tweet> getTweetFromId(String id) {

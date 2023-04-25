@@ -25,7 +25,7 @@ final fetchUserFeedProvider = StreamProvider.family((ref, List<User> tweeters) {
   return controller.fetchUserFeed(tweeters);
 });
 
-final fetchTweetCommentsProvider = StreamProvider.family((ref, String tweetId){
+final fetchTweetCommentsProvider = StreamProvider.family((ref, String tweetId) {
   return ref.read(tweetControllerProvider.notifier).fetchTweetComments(tweetId);
 });
 
@@ -39,7 +39,7 @@ final getUsersFollowersProvider = StreamProvider.family((ref, String id) {
   return controller.getUsersFollowers(id);
 });
 
-final tweetFromIdProvider = StreamProvider.family((ref, String id){
+final tweetFromIdProvider = StreamProvider.family((ref, String id) {
   return ref.read(tweetControllerProvider.notifier).getTweetFromId(id);
 });
 
@@ -131,7 +131,7 @@ class TweetControllerNotifier extends StateNotifier<bool> {
     return Stream.value([]);
   }
 
-  Stream<List<Comment>> fetchTweetComments(String tweetId){
+  Stream<List<Comment>> fetchTweetComments(String tweetId) {
     return _repo.fetchTweetComments(tweetId);
   }
 
@@ -143,7 +143,27 @@ class TweetControllerNotifier extends StateNotifier<bool> {
     return _repo.getUsersFollowers(id);
   }
 
-  Stream<Tweet> getTweetFromId(String id){
+  Stream<Tweet> getTweetFromId(String id) {
     return _repo.getTweetFromId(id);
+  }
+
+  void likeTweet(Tweet tweet, String likerId, BuildContext context)async{
+    final res = await _repo.likeTweet(tweet, likerId);
+    res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
+  }
+
+  void retweetTweet(Tweet tweet, String userId, BuildContext context)async{
+    final res = await _repo.retweetTweet(tweet, userId);
+    res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
+  }
+
+  void likeComment(Comment comment, String likerId, BuildContext context)async{
+    final res = await _repo.likeComment(comment, likerId);
+    res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
+  }
+
+  void retweetComment(Comment comment, String userId, BuildContext context)async{
+    final res = await _repo.retweetComment(comment, userId);
+    res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
   }
 }

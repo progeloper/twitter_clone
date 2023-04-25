@@ -17,6 +17,7 @@ class Palette {
   static const extraLightGrey = Color.fromRGBO(225, 232, 237, 1);
   static const extraExtraLightGrey = Color.fromRGBO(245, 248, 250, 1);
   static const redColor = Color.fromRGBO(229, 9, 20, 1);
+  static const greenColor = Color.fromRGBO(25, 207, 134, 1);
 
   static var lightsOutModeAppTheme = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: blackColor,
