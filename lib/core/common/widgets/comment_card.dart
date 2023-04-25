@@ -100,6 +100,9 @@ class CommentCard extends ConsumerWidget {
                     children: [
                       Text(
                         comment.tweet,
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
                       ),
                       const SizedBox(height: 5,),
                       if (comment.imageLink != null)

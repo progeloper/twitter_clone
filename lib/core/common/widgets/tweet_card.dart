@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/features/tweets/screens/tweet_screen.dart';
 import 'package:twitter_clone/models/tweet.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
@@ -98,16 +99,39 @@ class TweetCard extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        tweet.tweet,
-                      ),
-                      const SizedBox(height: 5,),
-                      if (tweet.imageLink != null)
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      TweetScreen(tweet: tweet)));
+                        },
+                        child: Text(
+                          tweet.tweet,
+                          style: TextStyle(
+                            fontSize: 20,
                           ),
-                          child: Image.network(tweet.imageLink!),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      if (tweet.imageLink != null)
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        TweetScreen(tweet: tweet)));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Image.network(tweet.imageLink!),
+                          ),
                         ),
                       Row(
                         mainAxisSize: MainAxisSize.max,
