@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/core/common/error_text.dart';
+import 'package:twitter_clone/core/common/loader.dart';
+import 'package:twitter_clone/core/common/widgets/comment_card.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
+import 'package:twitter_clone/features/tweets/controller/tweet_controller.dart';
 import 'package:twitter_clone/features/tweets/screens/create_comment_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
@@ -45,7 +49,10 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () => goBack(context),
-            icon: FaIcon(FontAwesomeIcons.arrowLeft, color: theme.colorScheme.onPrimary,)),
+            icon: FaIcon(
+              FontAwesomeIcons.arrowLeft,
+              color: theme.colorScheme.onPrimary,
+            )),
         title: const Text(
           'Thread',
           style: TextStyle(fontSize: 20),
@@ -59,13 +66,18 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(color: theme.colorScheme.secondary, width: 0.5),
-              bottom: BorderSide(color: theme.colorScheme.secondary, width: 0.5),
+              bottom:
+                  BorderSide(color: theme.colorScheme.secondary, width: 0.5),
             ),
           ),
           child: TextFormField(
             controller: _controller,
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateCommentScreen(tweet: widget.tweet)));
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CreateCommentScreen(tweet: widget.tweet)));
             },
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -310,7 +322,25 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                       ),
                     ),
                   ],
-                )
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height,
+                  child: ref
+                      .watch(fetchTweetCommentsProvider(widget.tweet.tweetId))
+                      .when(
+                        data: (comments){
+                          return ListView.builder(itemCount: comments.length,itemBuilder: (context, index){
+                            final comment = comments[index];
+                            return CommentCard(comment: comment);
+                          });
+                        },
+                        error: (error, stackTrace) => Center(
+                          child: ErrorText(error: error.toString()),
+                        ),
+                        loading: () => const Center(child: Loader()),
+                      ),
+                ),
               ],
             ),
           ),

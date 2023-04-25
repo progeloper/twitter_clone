@@ -1,5 +1,5 @@
 class Comment {
-  final String tweet;
+  final String comment;
   final String? imageLink;
   final String commentId;
   final String uid;
@@ -15,7 +15,7 @@ class Comment {
 
 //<editor-fold desc="Data Methods">
   const Comment({
-    required this.tweet,
+    required this.comment,
     this.imageLink,
     required this.commentId,
     required this.uid,
@@ -32,7 +32,7 @@ class Comment {
 
 
   Comment copyWith({
-    String? tweet,
+    String? comment,
     String? imageLink,
     String? commentId,
     String? uid,
@@ -47,7 +47,7 @@ class Comment {
     String? parentId,
   }) {
     return Comment(
-      tweet: tweet ?? this.tweet,
+      comment: comment ?? this.comment,
       imageLink: imageLink ?? this.imageLink,
       commentId: commentId ?? this.commentId,
       uid: uid ?? this.uid,
@@ -65,7 +65,7 @@ class Comment {
 
   Map<String, dynamic> toMap() {
     return {
-      'tweet': this.tweet,
+      'tweet': this.comment,
       'imageLink': this.imageLink,
       'commentId': this.commentId,
       'uid': this.uid,
@@ -83,7 +83,7 @@ class Comment {
 
   factory Comment.fromMap(Map<String, dynamic> map) {
     return Comment(
-      tweet: map['tweet'] as String,
+      comment: map['comment'] as String,
       imageLink: map['imageLink'] as String,
       commentId: map['commentId'] as String,
       uid: map['uid'] as String,

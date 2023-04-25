@@ -6,6 +6,7 @@ import 'package:twitter_clone/core/constants/firebase_constants.dart';
 import 'package:twitter_clone/core/failure.dart';
 import 'package:twitter_clone/core/providers/firebase_providers.dart';
 import 'package:twitter_clone/core/type_defs.dart';
+import 'package:twitter_clone/models/comment.dart';
 import 'package:twitter_clone/models/tweet.dart';
 
 import '../../../models/user.dart';
@@ -30,9 +31,22 @@ class TweetRepository {
   CollectionReference get _users =>
       _firestore.collection(FirebaseConstants.usersCollection);
 
+  CollectionReference get _comments =>
+      _firestore.collection(FirebaseConstants.commentsCollectiion);
+
   FutureVoid uploadTweet(Tweet tweet) async {
     try {
       return right(_tweets.doc(tweet.tweetId).set(tweet.toMap()));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid uploadComment(Comment comment) async {
+    try {
+      return right(_tweets.doc(comment.commentId).set(comment.toMap()));
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -50,16 +64,26 @@ class TweetRepository {
             .toList());
   }
 
+  Stream<List<Comment>> fetchTweetComments(String tweetId) {
+    return _comments
+        .where('parenId', isEqualTo: tweetId)
+        .orderBy('postedAt', descending: true)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => Comment.fromMap(e.data() as Map<String, dynamic>))
+            .toList());
+  }
+
   Stream<List<User>> getUsersFollowing(String id) {
     return _users
         .where('following', arrayContains: id)
         .snapshots()
         .map((event) {
-          List<User> users = [];
-          for(var doc in event.docs){
-            users.add(User.fromMap(doc.data() as Map<String, dynamic>));
-          }
-          return users;
+      List<User> users = [];
+      for (var doc in event.docs) {
+        users.add(User.fromMap(doc.data() as Map<String, dynamic>));
+      }
+      return users;
     });
   }
 
@@ -69,10 +93,17 @@ class TweetRepository {
         .snapshots()
         .map((event) {
       List<User> users = [];
-      for(var doc in event.docs){
+      for (var doc in event.docs) {
         users.add(User.fromMap(doc.data() as Map<String, dynamic>));
       }
       return users;
     });
+  }
+
+  Stream<Tweet> getTweetFromId(String id) {
+    return _tweets
+        .doc(id)
+        .snapshots()
+        .map((event) => Tweet.fromMap(event.data() as Map<String, dynamic>));
   }
 }

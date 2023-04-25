@@ -63,13 +63,15 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
     }
   }
 
-  void uploadTweet(BuildContext context, WidgetRef ref, User user) {
+  void uploadComment(BuildContext context, WidgetRef ref, User user) {
     if (_controller.text.isNotEmpty || imagePost != null) {
-      ref.read(tweetControllerProvider.notifier).uploadTweet(
-          tweet: _controller.text.trim(),
-          user: user,
-          context: context,
-          file: imagePost);
+      ref.read(tweetControllerProvider.notifier).uploadComment(
+            commentText: _controller.text.trim(),
+            user: user,
+            context: context,
+            file: imagePost,
+            tweet: widget.tweet,
+          );
     }
   }
 
@@ -114,7 +116,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
                               onPressed: () {},
                               icon: RoundedFilledButton(
                                   function: () {
-                                    uploadTweet(context, ref, user!);
+                                    uploadComment(context, ref, user!);
                                     Navigator.pop(context);
                                   },
                                   label: 'Tweet'),
@@ -137,7 +139,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
                       ),
                       Text(
                         '@${widget.tweet.username}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Palette.blueColor,
                         ),
                       ),
@@ -178,7 +180,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
                           child: Image.file(imagePost!),
                         ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -186,18 +188,18 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
                   children: [
                     IconButton(
                       onPressed: () => selectImage(),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.photo_outlined,
                         color: Palette.blueColor,
                         size: 40,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     IconButton(
                       onPressed: () => selectGif(),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.gif_box_outlined,
                         color: Palette.blueColor,
                         size: 40,
