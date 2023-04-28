@@ -56,17 +56,19 @@ class TweetControllerNotifier extends StateNotifier<bool> {
   void uploadTweet(
       {required String tweet,
       required User user,
-      File? file,
+      required List<File> files,
       required BuildContext context}) async {
     final tweetId = const Uuid().v1();
     final String postedAt = DateFormat('dd MMMM yyyy').format(DateTime.now());
-    String? imageLink;
-    if (file != null) {
-      final upload =
-          await _storageRepo.storeFile('tweets/${tweetId}', tweetId, file);
-      upload.fold((l) => showSnackBar(context, 'An error occurred'), (r) {
-        imageLink = r;
-      });
+    List<String> imageLink = [];
+    if (files.isNotEmpty) {
+      for(int i=0;i<files.length;i++){
+        final upload =
+            await _storageRepo.storeFile('tweets/${tweetId}${i.toString()}', tweetId, files[i]);
+        upload.fold((l) => showSnackBar(context, 'An error occurred'), (r) {
+          imageLink.add(r);
+        });
+      }
     }
     final model = Tweet(
         tweet: tweet,
@@ -91,17 +93,19 @@ class TweetControllerNotifier extends StateNotifier<bool> {
       {required String commentText,
       required User user,
       required Tweet tweet,
-      File? file,
+      required List<File> files,
       required BuildContext context}) async {
     final commentId = const Uuid().v1();
     final String postedAt = DateFormat('dd MMMM yyyy').format(DateTime.now());
-    String? imageLink;
-    if (file != null) {
-      final upload = await _storageRepo.storeFile(
-          'comments/${commentId}', commentId, file);
-      upload.fold((l) => showSnackBar(context, 'An error occurred'), (r) {
-        imageLink = r;
-      });
+    List<String> imageLink = [];
+    if (files.isNotEmpty) {
+      for(int i=0;i<files.length;i++){
+        final upload =
+        await _storageRepo.storeFile('tweets/${commentId}${i.toString()}', commentId, files[i]);
+        upload.fold((l) => showSnackBar(context, 'An error occurred'), (r) {
+          imageLink.add(r);
+        });
+      }
     }
     final model = Comment(
         comment: commentText,

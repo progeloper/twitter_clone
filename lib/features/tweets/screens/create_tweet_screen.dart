@@ -25,7 +25,7 @@ class CreateTweetScreen extends ConsumerStatefulWidget {
 class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   late TextEditingController _controller;
   bool canTweet = false;
-  File? imagePost;
+  List<File> images = [];
   GiphyGif? gif;
 
   @override
@@ -54,20 +54,20 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
 
   void selectImage() async {
     final result = await pickImage();
-    if (result != null) {
+    if (result.isNotEmpty) {
       setState(() {
-        imagePost = File(result.files.first.path!);
+        images = result;
       });
     }
   }
 
   void uploadTweet(BuildContext context, WidgetRef ref, User user) {
-    if (_controller.text.isNotEmpty || imagePost != null) {
+    if (_controller.text.isNotEmpty) {
       ref.read(tweetControllerProvider.notifier).uploadTweet(
           tweet: _controller.text.trim(),
           user: user,
           context: context,
-          file: imagePost);
+          files: images);
     }
   }
 
@@ -142,38 +142,44 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 3,
-                  child: (imagePost == null)
+                  child: (images.isEmpty)
                       ? (gif == null)
                           ? Container()
                           : AspectRatio(
                               aspectRatio: 487 / 451,
                               child: Image.network(gif!.images.original!.url!),
                             )
-                      : AspectRatio(
-                          aspectRatio: 487 / 451,
-                          child: Image.file(imagePost!),
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: images.length,
+                          itemBuilder: (context, index) {
+                            return AspectRatio(
+                              aspectRatio: 487 / 451,
+                              child: Image.file(images[index]),
+                            );
+                          },
                         ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     IconButton(
-                      onPressed: () => selectImage(),
-                      icon: Icon(
+                      onPressed: selectImage,
+                      icon: const Icon(
                         Icons.photo_outlined,
                         color: Palette.blueColor,
                         size: 40,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     IconButton(
                       onPressed: () => selectGif(),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.gif_box_outlined,
                         color: Palette.blueColor,
                         size: 40,

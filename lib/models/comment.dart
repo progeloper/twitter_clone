@@ -1,6 +1,6 @@
 class Comment {
   final String comment;
-  final String? imageLink;
+  final List imageLink;
   final String commentId;
   final String uid;
   final List likes;
@@ -16,7 +16,7 @@ class Comment {
 //<editor-fold desc="Data Methods">
   const Comment({
     required this.comment,
-    this.imageLink,
+    required this.imageLink,
     required this.commentId,
     required this.uid,
     required this.likes,
@@ -33,7 +33,7 @@ class Comment {
 
   Comment copyWith({
     String? comment,
-    String? imageLink,
+    List? imageLink,
     String? commentId,
     String? uid,
     List? likes,
@@ -84,7 +84,7 @@ class Comment {
   factory Comment.fromMap(Map<String, dynamic> map) {
     return Comment(
       comment: map['comment'] as String,
-      imageLink: map['imageLink'] as String?,
+      imageLink: map['imageLink'] as List,
       commentId: map['commentId'] as String,
       uid: map['uid'] as String,
       likes: map['likes'] as List,

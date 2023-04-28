@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:twitter_clone/core/common/widgets/tweet_card.dart';
 import 'package:twitter_clone/features/auth/screens/login_screen.dart';
 import 'package:twitter_clone/features/feed/screens/feed_screen.dart';
+import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/features/tweets/screens/create_tweet_screen.dart';
 import 'package:twitter_clone/models/tweet.dart';
 
@@ -22,6 +23,7 @@ class Constants{
   );
 
   static const tabScreens = <Widget>[
+    // ProfileScreen(uid: 'GTuSFPg9sSeu0aH2e7WvUDvHzI52'),
     FeedScreen(),
     Center(child: Text('feed'),),
     Center(child: Text('search'),),

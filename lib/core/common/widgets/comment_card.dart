@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/features/tweets/screens/create_tweet_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
@@ -62,9 +63,14 @@ class _CommentCardState extends ConsumerState<CommentCard> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(comment.profilePic),
-            radius: 30,
+          GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(uid: comment.uid)));
+            },
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(comment.profilePic),
+              radius: 30,
+            ),
           ),
           const SizedBox(
             width: 10,
@@ -75,7 +81,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   height: 30,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +90,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: '${comment.name}',
+                          text: comment.name,
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w600,
@@ -132,10 +138,110 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                     const SizedBox(height: 5,),
                     if (comment.imageLink != null)
                       Container(
+                        height: 200,
+                        width: double.infinity,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Image.network(comment.imageLink!),
+                        child: (comment.imageLink.length == 1)
+                            ? Image.network(comment.imageLink[0])
+                            : (comment.imageLink.length == 2)
+                            ? Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Image.network(
+                                comment.imageLink[0],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 2,
+                            ),
+                            Expanded(
+                              child: Image.network(
+                                comment.imageLink[1],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        )
+                            : (comment.imageLink.length == 23)
+                            ? Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                                child: Image.network(
+                                  comment.imageLink[0],
+                                  fit: BoxFit.cover,
+                                )),
+                            const SizedBox(
+                              width: 2,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisSize:
+                                MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                      child: Image.network(
+                                        comment.imageLink[1],
+                                        fit: BoxFit.cover,
+                                      )),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Expanded(
+                                      child: Image.network(
+                                          comment.imageLink[
+                                          2])),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                            : Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Column(
+                              children: [
+                                Expanded(
+                                  child: Image.network(
+                                    comment.imageLink[0],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(height: 2,),
+                                Expanded(
+                                  child: Image.network(
+                                    comment.imageLink[1],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 2,
+                            ),
+                            Column(
+                              children: [
+                                Expanded(
+                                  child: Image.network(
+                                    comment.imageLink[2],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(height: 2,),
+                                Expanded(
+                                  child: Image.network(
+                                    comment.imageLink[3],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -146,7 +252,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateTweetScreen()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const CreateTweetScreen()));
                               },
                               icon: FaIcon(
                                 FontAwesomeIcons.comment,
@@ -168,11 +274,11 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                             IconButton(
                               onPressed: ()=>retweetComment(context, ref, user.uid),
                               icon: (comment.retweets.contains(user!.uid))
-                                  ? FaIcon(
+                                  ? const FaIcon(
                                 FontAwesomeIcons.retweet,
                                 color: Palette.greenColor,
                               )
-                                  : FaIcon(
+                                  : const FaIcon(
                                 FontAwesomeIcons.retweet,
                                 color: Palette.darkGreyColor,
                               ),
@@ -193,11 +299,11 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                               onPressed: () =>
                                   likeComment(context, ref, user.uid),
                               icon: (comment.likes.contains(user!.uid))
-                                  ? FaIcon(
+                                  ? const FaIcon(
                                 FontAwesomeIcons.solidHeart,
                                 color: Palette.redColor,
                               )
-                                  : FaIcon(
+                                  : const FaIcon(
                                 FontAwesomeIcons.heart,
                                 color: Palette.darkGreyColor,
                               ),
@@ -213,8 +319,8 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                         ),
                         IconButton(
                           onPressed: () {},
-                          icon: FaIcon(
-                            FontAwesomeIcons.shareNodes,
+                          icon: Icon(
+                            Icons.share_outlined,
                             color: theme.colorScheme.secondary,
                           ),
                         ),

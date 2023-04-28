@@ -1,6 +1,6 @@
 class Tweet{
   final String tweet;
-  final String? imageLink;
+  final List imageLink;
   final String tweetId;
   final String uid;
   final List likes;
@@ -14,7 +14,7 @@ class Tweet{
 //<editor-fold desc="Data Methods">
   const Tweet({
     required this.tweet,
-    this.imageLink,
+    required this.imageLink,
     required this.tweetId,
     required this.uid,
     required this.likes,
@@ -26,9 +26,10 @@ class Tweet{
     required this.commentCount,
   });
 
+
   Tweet copyWith({
     String? tweet,
-    String? imageLink,
+    List? imageLink,
     String? tweetId,
     String? uid,
     List? likes,
@@ -73,7 +74,7 @@ class Tweet{
   factory Tweet.fromMap(Map<String, dynamic> map) {
     return Tweet(
       tweet: map['tweet'] as String,
-      imageLink: map['imageLink'] as String?,
+      imageLink: map['imageLink'] as List,
       tweetId: map['tweetId'] as String,
       uid: map['uid'] as String,
       likes: map['likes'] as List,

@@ -27,7 +27,7 @@ class CreateCommentScreen extends ConsumerStatefulWidget {
 class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
   late TextEditingController _controller;
   bool canTweet = false;
-  File? imagePost;
+  List<File> images = [];
   GiphyGif? gif;
 
   @override
@@ -56,20 +56,20 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
 
   void selectImage() async {
     final result = await pickImage();
-    if (result != null) {
+    if (result.isNotEmpty) {
       setState(() {
-        imagePost = File(result.files.first.path!);
+        images = result;
       });
     }
   }
 
   void uploadComment(BuildContext context, WidgetRef ref, User user) {
-    if (_controller.text.isNotEmpty || imagePost != null) {
+    if (_controller.text.isNotEmpty) {
       ref.read(tweetControllerProvider.notifier).uploadComment(
             commentText: _controller.text.trim(),
             user: user,
             context: context,
-            file: imagePost,
+            files: images,
             tweet: widget.tweet,
           );
     }
@@ -168,16 +168,22 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 3,
-                  child: (imagePost == null)
+                  child: (images.isEmpty)
                       ? (gif == null)
                           ? Container()
                           : AspectRatio(
                               aspectRatio: 487 / 451,
                               child: Image.network(gif!.images.original!.url!),
                             )
-                      : AspectRatio(
-                          aspectRatio: 487 / 451,
-                          child: Image.file(imagePost!),
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: images.length,
+                          itemBuilder: (context, index) {
+                            return AspectRatio(
+                              aspectRatio: 487 / 451,
+                              child: Image.file(images[index]),
+                            );
+                          },
                         ),
                 ),
                 const SizedBox(

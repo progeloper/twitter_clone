@@ -56,7 +56,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         _dateController.text.isNotEmpty) {
       if(_formKey.currentState!.validate()){
         Routemaster.of(context).push(
-            '/details-screen/${_firstNameController.text.trim()}/${_emailController.text.trim()}/${_dateController.text.trim()}');
+            '/details-screen/${_firstNameController.text.trim()}/${_emailController.text.trim()}/${_dateController.text}');
       }
     }
   }

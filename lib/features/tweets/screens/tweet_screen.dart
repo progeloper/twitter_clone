@@ -41,14 +41,14 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
     Navigator.pop(context);
   }
 
-  void likeTweet(BuildContext context, WidgetRef ref, String userId) async {
+  void likeTweet(BuildContext context, WidgetRef ref, String userId) {
     ref
         .read(tweetControllerProvider.notifier)
         .likeTweet(widget.tweet, userId, context);
     setState(() {});
   }
 
-  void retweetTweet(BuildContext context, WidgetRef ref, String userId) async {
+  void retweetTweet(BuildContext context, WidgetRef ref, String userId) {
     ref
         .read(tweetControllerProvider.notifier)
         .retweetTweet(widget.tweet, userId, context);
@@ -110,11 +110,13 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
               child: SingleChildScrollView(
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   decoration: const BoxDecoration(
                     border: Border(
                       top: BorderSide(color: Palette.darkGreyColor, width: 0.5),
-                      bottom: BorderSide(color: Palette.darkGreyColor, width: 0.5),
+                      bottom:
+                          BorderSide(color: Palette.darkGreyColor, width: 0.5),
                     ),
                   ),
                   child: Column(
@@ -141,7 +143,8 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       RichText(
                                         text: TextSpan(
@@ -198,14 +201,112 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                           const SizedBox(
                             height: 5,
                           ),
-                          if (tweet.imageLink != null)
+                          if (tweet.imageLink.isNotEmpty)
                             Container(
-                              height: 300,
+                              height: 200,
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Image.network(widget.tweet.imageLink!),
+                              child: (tweet.imageLink.length == 1)
+                                  ? Image.network(tweet.imageLink[0])
+                                  : (tweet.imageLink.length == 2)
+                                      ? Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Expanded(
+                                              child: Image.network(
+                                                tweet.imageLink[0],
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 2,
+                                            ),
+                                            Expanded(
+                                              child: Image.network(
+                                                tweet.imageLink[1],
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : (tweet.imageLink.length == 23)
+                                          ? Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Expanded(
+                                                    child: Image.network(
+                                                  tweet.imageLink[0],
+                                                  fit: BoxFit.cover,
+                                                )),
+                                                const SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Expanded(
+                                                          child: Image.network(
+                                                        tweet.imageLink[1],
+                                                        fit: BoxFit.cover,
+                                                      )),
+                                                      SizedBox(
+                                                        height: 2,
+                                                      ),
+                                                      Expanded(
+                                                          child: Image.network(
+                                                              tweet.imageLink[
+                                                                  2])),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Expanded(
+                                        child: Image.network(
+                                          tweet.imageLink[0],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2,),
+                                      Expanded(
+                                        child: Image.network(
+                                          tweet.imageLink[1],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 2,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Expanded(
+                                        child: Image.network(
+                                          tweet.imageLink[2],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2,),
+                                      Expanded(
+                                        child: Image.network(
+                                          tweet.imageLink[3],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                         ],
                       ),
@@ -307,28 +408,29 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () => retweetTweet(context, ref, user.uid),
+                            onPressed: () =>
+                                retweetTweet(context, ref, user.uid),
                             icon: (tweet.retweets.contains(user!.uid))
                                 ? const FaIcon(
-                              FontAwesomeIcons.retweet,
-                              color: Palette.greenColor,
-                            )
+                                    FontAwesomeIcons.retweet,
+                                    color: Palette.greenColor,
+                                  )
                                 : const FaIcon(
-                              FontAwesomeIcons.retweet,
-                              color: Palette.darkGreyColor,
-                            ),
+                                    FontAwesomeIcons.retweet,
+                                    color: Palette.darkGreyColor,
+                                  ),
                           ),
                           IconButton(
                             onPressed: () => likeTweet(context, ref, user.uid),
                             icon: (tweet.likes.contains(user.uid))
                                 ? const FaIcon(
-                              FontAwesomeIcons.solidHeart,
-                              color: Palette.redColor,
-                            )
+                                    FontAwesomeIcons.solidHeart,
+                                    color: Palette.redColor,
+                                  )
                                 : const FaIcon(
-                              FontAwesomeIcons.heart,
-                              color: Palette.darkGreyColor,
-                            ),
+                                    FontAwesomeIcons.heart,
+                                    color: Palette.darkGreyColor,
+                                  ),
                           ),
                           IconButton(
                             onPressed: () {},
@@ -347,24 +449,24 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                         width: double.infinity,
                         height: 800,
                         child: ref
-                            .watch(fetchTweetCommentsProvider(widget.tweet.tweetId))
+                            .watch(fetchTweetCommentsProvider(tweet.tweetId))
                             .when(
-                          data: (comments) {
-                            return ListView.builder(
-                                itemCount: comments.length,
-                                itemBuilder: (context, index) {
-                                  final comment = comments[index];
-                                  return CommentCard(comment: comment);
-                                });
-                          },
-                          error: (error, stackTrace) {
-                            print(stackTrace.toString());
-                            return Center(
-                              child: ErrorText(error: error.toString()),
-                            );
-                          },
-                          loading: () => const Center(child: Loader()),
-                        ),
+                              data: (comments) {
+                                return ListView.builder(
+                                    itemCount: comments.length,
+                                    itemBuilder: (context, index) {
+                                      final comment = comments[index];
+                                      return CommentCard(comment: comment);
+                                    });
+                              },
+                              error: (error, stackTrace) {
+                                print(stackTrace.toString());
+                                return Center(
+                                  child: ErrorText(error: error.toString()),
+                                );
+                              },
+                              loading: () => const Center(child: Loader()),
+                            ),
                       ),
                     ],
                   ),
@@ -381,5 +483,3 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
     );
   }
 }
-
-
