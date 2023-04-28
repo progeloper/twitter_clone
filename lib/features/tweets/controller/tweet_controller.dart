@@ -92,7 +92,7 @@ class TweetControllerNotifier extends StateNotifier<bool> {
   void uploadComment(
       {required String commentText,
       required User user,
-      required Tweet tweet,
+      required String tweetId,
       required List<File> files,
       required BuildContext context}) async {
     final commentId = const Uuid().v1();
@@ -120,7 +120,7 @@ class TweetControllerNotifier extends StateNotifier<bool> {
         name: user.name,
         commentCount: 0,
         isThread: false,
-        parentId: tweet.tweetId);
+        parentId: tweetId);
     state = true;
     final res = await _repo.uploadComment(model);
     state = false;

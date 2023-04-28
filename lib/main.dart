@@ -5,9 +5,6 @@ import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/common/error_text.dart';
 import 'package:twitter_clone/core/common/loader.dart';
 import 'package:twitter_clone/models/user.dart' as model;
-import 'package:twitter_clone/features/auth/screens/details_screen.dart';
-import 'package:twitter_clone/features/auth/screens/login_screen.dart';
-import 'package:twitter_clone/features/auth/screens/signup_screen.dart';
 import 'package:twitter_clone/router.dart';
 import 'package:twitter_clone/theme/palette.dart';
 import 'features/auth/controller/auth_controller.dart';
@@ -49,10 +46,11 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(themeProvider);
     return ref.watch(authStateChangeProvider).when(
           data: (data) => MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            theme: Palette.lightsOutModeAppTheme,
+            theme: theme,
             routerDelegate: RoutemasterDelegate(
               routesBuilder: (context) {
                 if (data != null) {

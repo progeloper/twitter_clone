@@ -121,56 +121,56 @@ class Palette {
     ),
   );
 
-  static var dimDarkModeAppTheme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: darkBlueColor,
-    dividerColor: darkGreyColor,
-    iconTheme: const IconThemeData(
-      color: whiteColor,
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: blackColor,
-      iconTheme: IconThemeData(
-        color: darkGreyColor,
-      ),
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(
-        color: whiteColor,
-      ),
-      bodyMedium: TextStyle(
-        color: whiteColor,
-      ),
-      bodySmall: TextStyle(
-        color: whiteColor,
-      ),
-      titleLarge: TextStyle(
-        color: whiteColor,
-      ),
-      titleMedium: TextStyle(
-        color: whiteColor,
-      ),
-      titleSmall: TextStyle(
-        color: whiteColor,
-      ),
-    ),
-    drawerTheme: const DrawerThemeData(
-      backgroundColor: darkBlueColor,
-    ),
-    primaryColor: blueColor,
-    colorScheme: const ColorScheme(
-      brightness: Brightness.dark,
-      primary: Palette.darkBlueColor,
-      onPrimary: Palette.extraExtraLightGrey,
-      secondary: Palette.darkBlueColor,
-      onSecondary: Palette.whiteColor,
-      error: Palette.redColor,
-      onError: Palette.whiteColor,
-      background: Palette.darkBlueColor,
-      onBackground: Palette.extraExtraLightGrey,
-      surface: Palette.darkBlueColor,
-      onSurface: Palette.whiteColor,
-    ),
-  );
+  // static var dimDarkModeAppTheme = ThemeData.dark().copyWith(
+  //   scaffoldBackgroundColor: darkBlueColor,
+  //   dividerColor: darkGreyColor,
+  //   iconTheme: const IconThemeData(
+  //     color: whiteColor,
+  //   ),
+  //   appBarTheme: const AppBarTheme(
+  //     backgroundColor: blackColor,
+  //     iconTheme: IconThemeData(
+  //       color: darkGreyColor,
+  //     ),
+  //   ),
+  //   textTheme: const TextTheme(
+  //     bodyLarge: TextStyle(
+  //       color: whiteColor,
+  //     ),
+  //     bodyMedium: TextStyle(
+  //       color: whiteColor,
+  //     ),
+  //     bodySmall: TextStyle(
+  //       color: whiteColor,
+  //     ),
+  //     titleLarge: TextStyle(
+  //       color: whiteColor,
+  //     ),
+  //     titleMedium: TextStyle(
+  //       color: whiteColor,
+  //     ),
+  //     titleSmall: TextStyle(
+  //       color: whiteColor,
+  //     ),
+  //   ),
+  //   drawerTheme: const DrawerThemeData(
+  //     backgroundColor: darkBlueColor,
+  //   ),
+  //   primaryColor: blueColor,
+  //   colorScheme: const ColorScheme(
+  //     brightness: Brightness.dark,
+  //     primary: Palette.darkBlueColor,
+  //     onPrimary: Palette.extraExtraLightGrey,
+  //     secondary: Palette.darkBlueColor,
+  //     onSecondary: Palette.whiteColor,
+  //     error: Palette.redColor,
+  //     onError: Palette.whiteColor,
+  //     background: Palette.darkBlueColor,
+  //     onBackground: Palette.extraExtraLightGrey,
+  //     surface: Palette.darkBlueColor,
+  //     onSurface: Palette.whiteColor,
+  //   ),
+  // );
 }
 
 class ToggleThemeNotifier extends StateNotifier<ThemeData> {
@@ -185,9 +185,6 @@ class ToggleThemeNotifier extends StateNotifier<ThemeData> {
     if (theme == 'light') {
       _mode = ThemeMode.light;
       state = Palette.lightModeAppTheme;
-    } else if (theme == 'dim') {
-      _mode = ThemeMode.dark;
-      state = Palette.dimDarkModeAppTheme;
     } else {
       _mode = ThemeMode.dark;
       state = Palette.lightsOutModeAppTheme;
@@ -196,21 +193,14 @@ class ToggleThemeNotifier extends StateNotifier<ThemeData> {
 
   ThemeMode get mode => _mode;
 
-  void toggleTheme(bool dim) async {
+  void toggleTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final theme = prefs.getString('theme');
     if (theme == 'light') {
-      if (dim) {
-        _mode = ThemeMode.dark;
-        state = Palette.dimDarkModeAppTheme;
-        prefs.setString('theme', 'dim');
-        getTheme();
-      } else {
-        _mode = ThemeMode.dark;
-        state = Palette.lightsOutModeAppTheme;
-        prefs.setString('theme', 'lightsOut');
-        getTheme();
-      }
+      _mode = ThemeMode.dark;
+      state = Palette.lightsOutModeAppTheme;
+      prefs.setString('theme', 'lightsOut');
+      getTheme();
     } else {
       _mode = ThemeMode.light;
       state = Palette.lightModeAppTheme;

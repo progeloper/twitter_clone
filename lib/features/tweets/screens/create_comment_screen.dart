@@ -14,10 +14,10 @@ import '../../../models/tweet.dart';
 import '../../../theme/palette.dart';
 
 class CreateCommentScreen extends ConsumerStatefulWidget {
-  final Tweet tweet;
+  final String tweetId;
   const CreateCommentScreen({
     Key? key,
-    required this.tweet,
+    required this.tweetId,
   }) : super(key: key);
 
   @override
@@ -70,7 +70,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
             user: user,
             context: context,
             files: images,
-            tweet: widget.tweet,
+            tweetId: widget.tweetId,
           );
     }
   }
@@ -90,6 +90,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
   Widget build(BuildContext context) {
     final user = ref.read(userProvider);
     final theme = ref.watch(themeProvider);
+    final tweet = ref.read(tweetFromIdProvider(widget.tweetId)).value;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -138,7 +139,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateCommentScreen> {
                         ),
                       ),
                       Text(
-                        '@${widget.tweet.username}',
+                        '@${tweet!.username}',
                         style: const TextStyle(
                           color: Palette.blueColor,
                         ),

@@ -12,10 +12,10 @@ import 'package:twitter_clone/theme/palette.dart';
 import '../../../models/tweet.dart';
 
 class TweetScreen extends ConsumerStatefulWidget {
-  final Tweet tweet;
+  final String tweetId;
   const TweetScreen({
     Key? key,
-    required this.tweet,
+    required this.tweetId,
   }) : super(key: key);
 
   @override
@@ -149,17 +149,17 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
     Navigator.pop(context);
   }
 
-  void likeTweet(BuildContext context, WidgetRef ref, String userId) {
+  void likeTweet(BuildContext context, WidgetRef ref, String userId, Tweet tweet) {
     ref
         .read(tweetControllerProvider.notifier)
-        .likeTweet(widget.tweet, userId, context);
+        .likeTweet(tweet, userId, context);
     setState(() {});
   }
 
-  void retweetTweet(BuildContext context, WidgetRef ref, String userId) {
+  void retweetTweet(BuildContext context, WidgetRef ref, String userId, Tweet tweet) {
     ref
         .read(tweetControllerProvider.notifier)
-        .retweetTweet(widget.tweet, userId, context);
+        .retweetTweet(tweet, userId, context);
     setState(() {});
   }
 
@@ -167,8 +167,10 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
   Widget build(BuildContext context) {
     final user = ref.read(userProvider);
     final theme = ref.watch(themeProvider);
+    final tweet = ref.watch(tweetFromIdProvider(widget.tweetId)).value;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: theme.colorScheme.background,
         leading: IconButton(
             onPressed: () => goBack(context),
             icon: FaIcon(
@@ -199,20 +201,20 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          CreateCommentScreen(tweet: widget.tweet)));
+                          CreateCommentScreen(tweetId: widget.tweetId)));
             },
             decoration: InputDecoration(
               border: InputBorder.none,
               filled: false,
               hintText: 'Tweet your reply',
               hintStyle: TextStyle(
-                color: theme.colorScheme.secondary,
+                color: Palette.darkGreyColor,
               ),
             ),
           ),
         ),
       ),
-      body: ref.watch(tweetFromIdProvider(widget.tweet.tweetId)).when(
+      body: ref.watch(tweetFromIdProvider(widget.tweetId)).when(
           data: (tweet) {
             return SafeArea(
               child: SingleChildScrollView(
@@ -257,9 +259,10 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                                       RichText(
                                         text: TextSpan(
                                           text: tweet.name,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.w600,
+                                            color: theme.colorScheme.onPrimary,
                                           ),
                                           children: [
                                             TextSpan(
@@ -299,6 +302,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             tweet.tweet,
@@ -331,8 +335,8 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                         width: double.infinity,
                         child: Text(
                           tweet.postedAt,
-                          style: TextStyle(
-                            color: theme.colorScheme.secondary,
+                          style: const TextStyle(
+                            color: Palette.darkGreyColor,
                           ),
                         ),
                       ),
@@ -356,10 +360,10 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(
+                            const Text(
                               'Comments',
                               style: TextStyle(
-                                color: theme.colorScheme.secondary,
+                                color: Palette.darkGreyColor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -376,10 +380,10 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(
+                            const Text(
                               'Retweets',
                               style: TextStyle(
-                                color: theme.colorScheme.secondary,
+                                color: Palette.darkGreyColor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -396,10 +400,10 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                             const SizedBox(
                               width: 10,
                             ),
-                            Text(
+                            const Text(
                               'Likes',
                               style: TextStyle(
-                                color: theme.colorScheme.secondary,
+                                color: Palette.darkGreyColor,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -412,14 +416,14 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                         children: [
                           IconButton(
                             onPressed: () {},
-                            icon: FaIcon(
+                            icon: const FaIcon(
                               FontAwesomeIcons.comment,
-                              color: theme.colorScheme.secondary,
+                              color: Palette.darkGreyColor,
                             ),
                           ),
                           IconButton(
                             onPressed: () =>
-                                retweetTweet(context, ref, user.uid),
+                                retweetTweet(context, ref, user.uid, tweet),
                             icon: (tweet.retweets.contains(user!.uid))
                                 ? const FaIcon(
                                     FontAwesomeIcons.retweet,
@@ -431,7 +435,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                                   ),
                           ),
                           IconButton(
-                            onPressed: () => likeTweet(context, ref, user.uid),
+                            onPressed: () => likeTweet(context, ref, user.uid, tweet),
                             icon: (tweet.likes.contains(user.uid))
                                 ? const FaIcon(
                                     FontAwesomeIcons.solidHeart,
@@ -444,9 +448,9 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                           ),
                           IconButton(
                             onPressed: () {},
-                            icon: FaIcon(
-                              FontAwesomeIcons.shareNodes,
-                              color: theme.colorScheme.secondary,
+                            icon: const Icon(
+                              Icons.share_outlined,
+                              color: Palette.darkGreyColor,
                             ),
                           ),
                         ],

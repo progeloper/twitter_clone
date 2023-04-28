@@ -44,7 +44,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
           Expanded(
             child: Image.network(
               tweet.imageLink[0],
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
           const SizedBox(
@@ -53,7 +53,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
           Expanded(
             child: Image.network(
               tweet.imageLink[1],
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
         ],
@@ -66,7 +66,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
           Expanded(
               child: Image.network(
                 tweet.imageLink[0],
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               )),
           const SizedBox(
             width: 2,
@@ -78,7 +78,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                 Expanded(
                     child: Image.network(
                       tweet.imageLink[1],
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     )),
                 SizedBox(
                   height: 2,
@@ -101,7 +101,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
               Expanded(
                 child: Image.network(
                   tweet.imageLink[0],
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
               const SizedBox(
@@ -110,7 +110,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
               Expanded(
                 child: Image.network(
                   tweet.imageLink[1],
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
             ],
@@ -123,7 +123,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
               Expanded(
                 child: Image.network(
                   tweet.imageLink[2],
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
               const SizedBox(
@@ -132,7 +132,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
               Expanded(
                 child: Image.network(
                   tweet.imageLink[3],
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
             ],
@@ -189,9 +189,10 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                       RichText(
                         text: TextSpan(
                           text: tweet.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.onPrimary,
                           ),
                           children: [
                             TextSpan(
@@ -233,7 +234,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    TweetScreen(tweet: tweet)));
+                                    TweetScreen(tweetId: tweet.tweetId)));
                       },
                       child: Text(
                         tweet.tweet,
@@ -252,7 +253,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      TweetScreen(tweet: tweet)));
+                                      TweetScreen(tweetId: tweet.tweetId)));
                         },
                         child: Container(
                           height: 200,
@@ -275,7 +276,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
-                                        CreateCommentScreen(tweet: tweet)));
+                                        CreateCommentScreen(tweetId: tweet.tweetId)));
                               },
                               icon: const FaIcon(
                                 FontAwesomeIcons.comment,

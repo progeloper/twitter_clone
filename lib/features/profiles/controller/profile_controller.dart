@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/core/providers/storage_repository_provider.dart';
 import 'package:twitter_clone/features/profiles/repository/profile_repository.dart';
+import 'package:twitter_clone/models/comment.dart';
 
 import '../../../core/common/utils.dart';
+import '../../../models/tweet.dart';
 import '../../../models/user.dart';
 
 
@@ -15,6 +17,18 @@ final profileControllerProvider = StateNotifierProvider<ProfileController, bool>
 
 final getProfileByIdProvider = StreamProvider.family((ref, String id) {
   return ref.read(profileControllerProvider.notifier).getProfileById(id);
+});
+
+final getUserTweetsProvider = StreamProvider.family((ref, String uid){
+  return ref.read(profileControllerProvider.notifier).getProfileTweets(uid);
+});
+
+final getUserCommentsProvider = StreamProvider.family((ref, String uid){
+  return ref.read(profileControllerProvider.notifier).getProfileComments(uid);
+});
+
+final getProfileLikedTweetsProvider = StreamProvider.family((ref, String uid){
+  return ref.read(profileControllerProvider.notifier).getProfileLikedTweets(uid);
 });
 
 class ProfileController extends StateNotifier<bool> {
@@ -34,6 +48,18 @@ class ProfileController extends StateNotifier<bool> {
   void followUser(User other, User currentUser, BuildContext context)async{
     final res = await _repo.followUser(other, currentUser);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
+  }
+
+  Stream<List<Tweet>> getProfileTweets(String uid){
+    return _repo.getProfileTweets(uid);
+  }
+
+  Stream<List<Comment>> getProfileComments(String uid){
+    return _repo.getProfileComments(uid);
+  }
+
+  Stream<List<Tweet>> getProfileLikedTweets(String uid){
+    return _repo.getProfileLikedTweets(uid);
   }
 
 }

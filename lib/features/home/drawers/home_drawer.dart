@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
+import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
 class HomeDrawer extends ConsumerWidget {
@@ -13,6 +14,7 @@ class HomeDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.read(userProvider);
+    final theme = ref.watch(themeProvider);
 
     return Drawer(
       width: MediaQuery.of(context).size.width * 0.7,
@@ -25,8 +27,13 @@ class HomeDrawer extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(user!.displayPic),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(uid: user.uid)));
+                },
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(user!.displayPic),
+                ),
               ),
               Constants.spaceBox10,
               Text(
@@ -41,9 +48,9 @@ class HomeDrawer extends ConsumerWidget {
               ),
               Text(
                 '@${user.username}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
-                  color: Palette.lightGreyColor,
+                  color: theme.colorScheme.onPrimary,
                 ),
               ),
               Constants.spaceBox10,
@@ -51,42 +58,44 @@ class HomeDrawer extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '${user.following.length} ',
+                    '${user.following.length-1} ',
                     style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Following',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Palette.lightGreyColor,
+                      color: theme.colorScheme.onPrimary,
                     ),
                   ),
                   const SizedBox(
                     width: 10,
                   ),
                   Text(
-                    '${user.followers.length} ',
+                    '${user.followers.length-1} ',
                     style: const TextStyle(
                       fontSize: 12,
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Followers',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Palette.lightGreyColor,
+                      color: theme.colorScheme.onPrimary,
                     ),
                   ),
                 ],
               ),
               Constants.spaceBox30,
-              const Divider(
-                color: Palette.lightGreyColor,
+              Divider(
+                color: theme.colorScheme.onPrimary,
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(uid: user.uid)));
+                },
                 contentPadding: const EdgeInsets.only(left: 0),
                 leading: const Icon(
                   Icons.person_outline,
@@ -181,8 +190,8 @@ class HomeDrawer extends ConsumerWidget {
                 ),
               ),
               Constants.spaceBox30,
-              const Divider(
-                color: Palette.lightGreyColor,
+              Divider(
+                color: theme.colorScheme.onPrimary,
               ),
               ListTile(
                 onTap: () {},
@@ -200,7 +209,9 @@ class HomeDrawer extends ConsumerWidget {
               ),
               Expanded(child: Container()),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(themeProvider.notifier).toggleTheme();
+                },
                 icon: Icon(
                   Icons.sunny,
                   size: 25,

@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/core/common/error_text.dart';
 import 'package:twitter_clone/core/common/loader.dart';
+import 'package:twitter_clone/core/common/widgets/comment_card.dart';
 import 'package:twitter_clone/core/common/widgets/rounded_filled_button.dart';
+import 'package:twitter_clone/core/common/widgets/tweet_card.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/profiles/controller/profile_controller.dart';
 import 'package:twitter_clone/theme/palette.dart';
@@ -39,7 +41,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         clipBehavior: Clip.none,
                         children: [
                           Positioned.fill(
-                            child: Image.network(profile.banner),
+                            child: Image.network(profile.banner, fit: BoxFit.fill,),
                           ),
                           Positioned(
                             bottom: -20,
@@ -105,10 +107,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 25),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           'Edit Profile',
-                                          style:
-                                              theme.primaryTextTheme.bodyMedium,
+                                          style:TextStyle(
+                                            color: Palette.darkGreyColor,
+                                          )
                                         ),
                                       ),
                                     ),
@@ -290,7 +293,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ];
                 },
                 body: DefaultTabController(
-                  length: 3,
+                  length: 4,
                   child: Scaffold(
                     appBar: TabBar(
                       indicatorColor: Palette.blueColor,
@@ -304,7 +307,79 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     ),
                     body: TabBarView(
                       children: [
-
+                        ref.watch(getUserTweetsProvider(profile.uid)).when(
+                              data: (tweets) {
+                                return ListView.builder(
+                                  itemCount: tweets.length,
+                                  itemBuilder: (context, index) {
+                                    final tweet = tweets[index];
+                                    return TweetCard(tweet: tweet);
+                                  },
+                                );
+                              },
+                              error: (error, stackTrace) => Center(
+                                child: ErrorText(error: error.toString()),
+                              ),
+                              loading: () => const Center(
+                                child: Loader(),
+                              ),
+                            ),
+                        ref.watch(getUserCommentsProvider(profile.uid)).when(
+                              data: (comments) {
+                                return ListView.builder(
+                                    itemCount: comments.length,
+                                    itemBuilder: (context, index) {
+                                      final comment = comments[index];
+                                      return CommentCard(comment: comment);
+                                    });
+                              },
+                              error: (error, stackTrace) {
+                                print(stackTrace.toString());
+                                return Center(
+                                  child: ErrorText(error: error.toString()),
+                                );
+                              },
+                              loading: () => const Center(
+                                child: Loader(),
+                              ),
+                            ),
+                        ref.watch(getUserTweetsProvider(profile.uid)).when(
+                              data: (tweets) {
+                                return ListView.builder(
+                                  itemCount: tweets.length,
+                                  itemBuilder: (context, index) {
+                                    final tweet = tweets[index];
+                                    if (tweet.imageLink.isNotEmpty) {
+                                      return TweetCard(tweet: tweet);
+                                    }
+                                    return Container();
+                                  },
+                                );
+                              },
+                              error: (error, stackTrace) => Center(
+                                child: ErrorText(error: error.toString()),
+                              ),
+                              loading: () => const Center(
+                                child: Loader(),
+                              ),
+                            ),
+                        ref.watch(getProfileLikedTweetsProvider(profile.uid)).when(
+                          data: (tweets) {
+                            return ListView.builder(
+                              itemCount: tweets.length,
+                              itemBuilder: (context, index) {
+                                final tweet = tweets[index];
+                                return TweetCard(tweet: tweet);
+                              },
+                            );
+                          },
+                          error: (error, stackTrace) => Center(
+                            child: ErrorText(error: error.toString()),
+                          ),
+                          loading: () => const Center(
+                            child: Loader(),
+                          ),
+                        ),
                       ],
                     ),
                   ),

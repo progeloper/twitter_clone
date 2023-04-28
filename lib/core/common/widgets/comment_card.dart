@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/features/tweets/screens/create_tweet_screen.dart';
+import 'package:twitter_clone/features/tweets/screens/tweet_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
 import '../../../features/auth/controller/auth_controller.dart';
@@ -91,7 +92,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                       comment.imageLink[1],
                       fit: BoxFit.cover,
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 2,
                 ),
                 Expanded(
@@ -103,7 +104,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
         ],
       );
     }
-    else {
+    else{
       return Row(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -237,14 +238,19 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      comment.comment,
-                      style: const TextStyle(
-                        fontSize: 16,
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>TweetScreen(tweetId: comment.parentId)));
+                      },
+                      child: Text(
+                        comment.comment,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 5,),
-                    if (comment.imageLink != null)
+                    if (comment.imageLink.isNotEmpty)
                       Container(
                         height: 200,
                         width: double.infinity,

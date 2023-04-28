@@ -38,6 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: theme.colorScheme.background,
         leading: Builder(builder: (context) {
           return IconButton(
             onPressed: () => displayDrawer(context),
