@@ -34,6 +34,113 @@ class _TweetCardState extends ConsumerState<TweetCard> {
         .retweetTweet(widget.tweet, userId, context);
     setState(() {});
   }
+  Widget getImages(Tweet tweet){
+    if(tweet.imageLink.length == 1) {
+      return Image.network(tweet.imageLink[0]);
+    } else if(tweet.imageLink.length == 2) {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Image.network(
+              tweet.imageLink[0],
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(
+            width: 2,
+          ),
+          Expanded(
+            child: Image.network(
+              tweet.imageLink[1],
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      );
+    }
+    else if(tweet.imageLink.length == 3) {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+              child: Image.network(
+                tweet.imageLink[0],
+                fit: BoxFit.cover,
+              )),
+          const SizedBox(
+            width: 2,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                    child: Image.network(
+                      tweet.imageLink[1],
+                      fit: BoxFit.cover,
+                    )),
+                SizedBox(
+                  height: 2,
+                ),
+                Expanded(
+                    child: Image.network(
+                        tweet.imageLink[2])),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+        else {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Column(
+            children: [
+              Expanded(
+                child: Image.network(
+                  tweet.imageLink[0],
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Expanded(
+                child: Image.network(
+                  tweet.imageLink[1],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 2,
+          ),
+          Column(
+            children: [
+              Expanded(
+                child: Image.network(
+                  tweet.imageLink[2],
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Expanded(
+                child: Image.network(
+                  tweet.imageLink[3],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+  }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,107 +260,8 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: (tweet.imageLink.length == 1)
-                              ? Image.network(tweet.imageLink[0])
-                              : (tweet.imageLink.length == 2)
-                                  ? Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Expanded(
-                                          child: Image.network(
-                                            tweet.imageLink[0],
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 2,
-                                        ),
-                                        Expanded(
-                                          child: Image.network(
-                                            tweet.imageLink[1],
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : (tweet.imageLink.length == 23)
-                                      ? Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                                child: Image.network(
-                                              tweet.imageLink[0],
-                                              fit: BoxFit.cover,
-                                            )),
-                                            const SizedBox(
-                                              width: 2,
-                                            ),
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Expanded(
-                                                      child: Image.network(
-                                                    tweet.imageLink[1],
-                                                    fit: BoxFit.cover,
-                                                  )),
-                                                  SizedBox(
-                                                    height: 2,
-                                                  ),
-                                                  Expanded(
-                                                      child: Image.network(
-                                                          tweet.imageLink[2])),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Expanded(
-                                                  child: Image.network(
-                                                    tweet.imageLink[0],
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Image.network(
-                                                    tweet.imageLink[1],
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              width: 2,
-                                            ),
-                                            Column(
-                                              children: [
-                                                Expanded(
-                                                  child: Image.network(
-                                                    tweet.imageLink[2],
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 2,
-                                                ),
-                                                Expanded(
-                                                  child: Image.network(
-                                                    tweet.imageLink[3],
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                          child: getImages(tweet),
+
                         ),
                       ),
                     Row(
@@ -352,3 +360,4 @@ class _TweetCardState extends ConsumerState<TweetCard> {
     );
   }
 }
+

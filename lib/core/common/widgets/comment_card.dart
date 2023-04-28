@@ -45,6 +45,114 @@ class _CommentCardState extends ConsumerState<CommentCard> {
     setState(() {});
   }
 
+  Widget getImages(Comment comment){
+    if(comment.imageLink.length == 1) {
+      return Image.network(comment.imageLink[0]);
+    } else if(comment.imageLink.length == 2) {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            child: Image.network(
+              comment.imageLink[0],
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(
+            width: 2,
+          ),
+          Expanded(
+            child: Image.network(
+              comment.imageLink[1],
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      );
+    }
+    else if(comment.imageLink.length == 3) {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+              child: Image.network(
+                comment.imageLink[0],
+                fit: BoxFit.cover,
+              )),
+          const SizedBox(
+            width: 2,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                    child: Image.network(
+                      comment.imageLink[1],
+                      fit: BoxFit.cover,
+                    )),
+                SizedBox(
+                  height: 2,
+                ),
+                Expanded(
+                    child: Image.network(
+                        comment.imageLink[2])),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+    else {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Column(
+            children: [
+              Expanded(
+                child: Image.network(
+                  comment.imageLink[0],
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Expanded(
+                child: Image.network(
+                  comment.imageLink[1],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 2,
+          ),
+          Column(
+            children: [
+              Expanded(
+                child: Image.network(
+                  comment.imageLink[2],
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Expanded(
+                child: Image.network(
+                  comment.imageLink[3],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
@@ -143,105 +251,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: (comment.imageLink.length == 1)
-                            ? Image.network(comment.imageLink[0])
-                            : (comment.imageLink.length == 2)
-                            ? Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: Image.network(
-                                comment.imageLink[0],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 2,
-                            ),
-                            Expanded(
-                              child: Image.network(
-                                comment.imageLink[1],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                        )
-                            : (comment.imageLink.length == 23)
-                            ? Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                                child: Image.network(
-                                  comment.imageLink[0],
-                                  fit: BoxFit.cover,
-                                )),
-                            const SizedBox(
-                              width: 2,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisSize:
-                                MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                      child: Image.network(
-                                        comment.imageLink[1],
-                                        fit: BoxFit.cover,
-                                      )),
-                                  SizedBox(
-                                    height: 2,
-                                  ),
-                                  Expanded(
-                                      child: Image.network(
-                                          comment.imageLink[
-                                          2])),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
-                            : Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Column(
-                              children: [
-                                Expanded(
-                                  child: Image.network(
-                                    comment.imageLink[0],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                const SizedBox(height: 2,),
-                                Expanded(
-                                  child: Image.network(
-                                    comment.imageLink[1],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 2,
-                            ),
-                            Column(
-                              children: [
-                                Expanded(
-                                  child: Image.network(
-                                    comment.imageLink[2],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                const SizedBox(height: 2,),
-                                Expanded(
-                                  child: Image.network(
-                                    comment.imageLink[3],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        child: getImages(comment),
                       ),
                     Row(
                       mainAxisSize: MainAxisSize.max,

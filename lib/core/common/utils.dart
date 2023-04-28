@@ -12,8 +12,13 @@ Future<List<File>> pickImage() async {
   final imagePicker = ImagePicker();
   final imageFiles = await imagePicker.pickMultiImage();
   if (imageFiles.isNotEmpty) {
-    for (int i = 0; i < 4; i++) {
-      images.add(File(imageFiles[i].path));
+    int i = 0;
+    for (final file in imageFiles) {
+      if(i == 4){
+        return images;
+      }
+      images.add(File(file.path));
+      i++;
     }
   }
   return images;
