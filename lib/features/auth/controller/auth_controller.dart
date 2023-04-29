@@ -61,6 +61,17 @@ class AuthController extends StateNotifier<bool> {
     });
   }
 
+  void logOut(BuildContext context) async{
+    final res = await _repo.logOut();
+    res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
+  }
+
+  void deactivate(BuildContext context, String uid) async{
+    final res = await _repo.deactivateAccunt(uid);
+    res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
+  }
+
+
   void login({
     required BuildContext context,
     required String email,

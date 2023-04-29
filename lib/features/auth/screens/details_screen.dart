@@ -44,8 +44,10 @@ class _DetailsScreenState extends ConsumerState<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ref.read(themeProvider);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: theme.colorScheme.background,
         title: SvgPicture.asset(
           'assets/twitter-logo.svg',
           colorFilter: const ColorFilter.mode(

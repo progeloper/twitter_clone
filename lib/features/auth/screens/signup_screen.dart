@@ -63,8 +63,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ref.read(themeProvider);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: theme.colorScheme.background,
         title: SvgPicture.asset(
           'assets/twitter-logo.svg',
           colorFilter: const ColorFilter.mode(
@@ -117,7 +119,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         controller: _emailController,
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 22,
                       ),
                       OutlinedTextField(
                         label: 'Date of birth',

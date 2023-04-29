@@ -24,7 +24,8 @@ class AuthRepository {
       : _auth = auth,
         _firestore = firestore;
 
-  CollectionReference get _users => _firestore.collection(FirebaseConstants.usersCollection);
+  CollectionReference get _users =>
+      _firestore.collection(FirebaseConstants.usersCollection);
 
   FutureEither<model.User> signUp({
     required String name,
@@ -79,6 +80,27 @@ class AuthRepository {
       throw e.message!;
     } catch (e) {
       return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid logOut() async {
+    try {
+      return right(await _auth.signOut());
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  FutureVoid deactivateAccunt(String uid)async{
+    try {
+      await _auth.signOut();
+      return right(await _users.doc(uid).delete());
+    } on FirebaseException catch (e) {
+    throw e.message!;
+    } catch (e) {
+    return left(Failure(e.toString()));
     }
   }
 

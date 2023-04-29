@@ -14,7 +14,9 @@ class InputTextField extends StatelessWidget {
       controller: _controller,
       decoration: InputDecoration(
         labelText: _labelText,
-
+        labelStyle: const TextStyle(
+          color: Palette.darkGreyColor,
+        ),
         border: const UnderlineInputBorder(
           borderSide: BorderSide(color: Palette.darkGreyColor),
         ),

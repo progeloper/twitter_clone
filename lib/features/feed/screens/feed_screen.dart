@@ -6,6 +6,7 @@ import 'package:twitter_clone/core/common/loader.dart';
 import 'package:twitter_clone/core/common/widgets/tweet_card.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/tweets/controller/tweet_controller.dart';
+import 'package:twitter_clone/theme/palette.dart';
 
 import '../../tweets/screens/create_tweet_screen.dart';
 
@@ -29,9 +30,10 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
     final user = ref.read(userProvider);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Palette.blueColor,
         onPressed: () => navigateToCreateTweetScreen(context),
-        child: const FaIcon(
-          FontAwesomeIcons.paperPlane,
+        child: const Icon(
+          Icons.add,
         ),
       ),
       body: ref.watch(getUsersFollowingProvider(user!.uid)).when(

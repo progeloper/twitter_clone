@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
+import 'package:twitter_clone/features/home/screens/settings_screen.dart';
 import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
@@ -53,21 +54,21 @@ class HomeDrawer extends ConsumerWidget {
                   color: theme.colorScheme.onPrimary,
                 ),
               ),
-              Constants.spaceBox10,
+              Constants.spaceBox20,
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     '${user.following.length-1} ',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Following',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: theme.colorScheme.onPrimary,
+                      fontSize: 16,
+                      color: Palette.darkGreyColor,
                     ),
                   ),
                   const SizedBox(
@@ -76,14 +77,14 @@ class HomeDrawer extends ConsumerWidget {
                   Text(
                     '${user.followers.length-1} ',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Followers',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: theme.colorScheme.onPrimary,
+                      fontSize: 16,
+                      color: Palette.darkGreyColor,
                     ),
                   ),
                 ],
@@ -194,7 +195,9 @@ class HomeDrawer extends ConsumerWidget {
                 color: theme.colorScheme.onPrimary,
               ),
               ListTile(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsScreen()));
+                },
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: const Text(
                   'Settings & Support',
