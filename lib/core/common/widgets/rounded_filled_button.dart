@@ -18,7 +18,7 @@ class RoundedFilledButton extends StatelessWidget {
       onPressed: function,
       style: TextButton.styleFrom(
         backgroundColor: color,
-        minimumSize: Size(MediaQuery.of(context).size.width, 50),
+        minimumSize: Size(MediaQuery.of(context).size.width, 30),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(32),
         ),

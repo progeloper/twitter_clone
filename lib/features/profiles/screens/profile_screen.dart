@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/common/error_text.dart';
 import 'package:twitter_clone/core/common/loader.dart';
 import 'package:twitter_clone/core/common/widgets/comment_card.dart';
@@ -98,7 +99,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     child: SizedBox(
                                       width: 120,
                                       child: OutlinedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Routemaster.of(context).push('/edit-profile-screen/${profile.uid}');
+                                        },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:

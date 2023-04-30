@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/common/error_text.dart';
 import 'package:twitter_clone/core/common/loader.dart';
 import 'package:twitter_clone/core/common/widgets/tweet_card.dart';
@@ -20,8 +21,7 @@ class FeedScreen extends ConsumerStatefulWidget {
 }
 
 void navigateToCreateTweetScreen(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => CreateTweetScreen()));
+  Routemaster.of(context).push('/create-tweet-screen');
 }
 
 class _FeedScreenState extends ConsumerState<FeedScreen> {

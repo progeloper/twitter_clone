@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/home/screens/settings_screen.dart';
@@ -30,7 +31,7 @@ class HomeDrawer extends ConsumerWidget {
             children: [
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(uid: user.uid)));
+                  Routemaster.of(context).push('/profile-screen/${user.uid}');
                 },
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(user!.displayPic),
@@ -95,7 +96,7 @@ class HomeDrawer extends ConsumerWidget {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen(uid: user.uid)));
+                  Routemaster.of(context).push('/profile-screen/${user.uid}');
                 },
                 contentPadding: const EdgeInsets.only(left: 0),
                 leading: const Icon(
@@ -196,7 +197,7 @@ class HomeDrawer extends ConsumerWidget {
               ),
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsScreen()));
+                  Routemaster.of(context).push('/settings-screen');
                 },
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: const Text(
@@ -215,7 +216,7 @@ class HomeDrawer extends ConsumerWidget {
                 onPressed: () {
                   ref.read(themeProvider.notifier).toggleTheme();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.sunny,
                   size: 25,
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/features/tweets/controller/tweet_controller.dart';
 import 'package:twitter_clone/features/tweets/screens/create_comment_screen.dart';
@@ -162,8 +163,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProfileScreen(uid: tweet.uid)));
+              Routemaster.of(context).push('/profile-screen/${tweet.uid}');
             },
             child: CircleAvatar(
               backgroundImage: NetworkImage(tweet.profilePic),
@@ -230,11 +230,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    TweetScreen(tweetId: tweet.tweetId)));
+                        Routemaster.of(context).push('/tweet-screen/${tweet.tweetId}');
                       },
                       child: Text(
                         tweet.tweet,
@@ -249,11 +245,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                     if (tweet.imageLink.isNotEmpty)
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      TweetScreen(tweetId: tweet.tweetId)));
+                          Routemaster.of(context).push('/tweet-screen/${tweet.tweetId}');
                         },
                         child: Container(
                           height: 200,
@@ -274,9 +266,7 @@ class _TweetCardState extends ConsumerState<TweetCard> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        CreateCommentScreen(tweetId: tweet.tweetId)));
+                                Routemaster.of(context).push('/create-comment-screen/${tweet.tweetId}');
                               },
                               icon: const FaIcon(
                                 FontAwesomeIcons.comment,

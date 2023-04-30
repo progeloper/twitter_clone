@@ -87,4 +87,15 @@ class ProfileRepository {
             .map((e) => Tweet.fromMap(e.data() as Map<String, dynamic>))
             .toList());
   }
+  
+  FutureVoid editProfile(User user)async{
+    try{
+      return right(_users.doc(user.uid).update(user.toMap()));
+    } on FirebaseException catch(e){
+      throw e.message!;
+    } catch (e){
+      return left(Failure(e.toString()));
+    }
+  }
+  
 }

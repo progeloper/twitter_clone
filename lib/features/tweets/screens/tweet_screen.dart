@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/common/error_text.dart';
 import 'package:twitter_clone/core/common/loader.dart';
 import 'package:twitter_clone/core/common/widgets/comment_card.dart';
@@ -146,7 +147,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
   }
 
   void goBack(BuildContext context) {
-    Navigator.pop(context);
+    Routemaster.of(context).pop();
   }
 
   void likeTweet(BuildContext context, WidgetRef ref, String userId, Tweet tweet) {
@@ -197,11 +198,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
           child: TextFormField(
             controller: _controller,
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CreateCommentScreen(tweetId: widget.tweetId)));
+              Routemaster.of(context).push('/create-comment-screen/${tweet!.tweetId}');
             },
             decoration: InputDecoration(
               border: InputBorder.none,

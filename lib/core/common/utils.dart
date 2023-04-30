@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,4 +23,9 @@ Future<List<File>> pickImage() async {
     }
   }
   return images;
+}
+Future<Uint8List> pickOneImage()async{
+  final picker = ImagePicker();
+  final imageFile = await picker.pickImage(source: ImageSource.gallery);
+  return imageFile!.readAsBytes();
 }

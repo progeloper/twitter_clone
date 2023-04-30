@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/features/tweets/screens/create_tweet_screen.dart';
 import 'package:twitter_clone/features/tweets/screens/tweet_screen.dart';
@@ -174,7 +175,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
         children: [
           GestureDetector(
             onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen(uid: comment.uid)));
+              Routemaster.of(context).push('/profile-screen/${comment.uid}');
             },
             child: CircleAvatar(
               backgroundImage: NetworkImage(comment.profilePic),
@@ -240,7 +241,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>TweetScreen(tweetId: comment.parentId)));
+                        Routemaster.of(context).push('/tweet-screen/${comment.parentId}');
                       },
                       child: Text(
                         comment.comment,
@@ -268,7 +269,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>const CreateTweetScreen()));
+                               // Routemaster.of(context).push('/create-tweet-screen');
                               },
                               icon: FaIcon(
                                 FontAwesomeIcons.comment,
