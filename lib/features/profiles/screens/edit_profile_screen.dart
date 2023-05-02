@@ -88,13 +88,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           _websiteController.text = profile.url;
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: theme.colorScheme.background,
               elevation: 0,
               automaticallyImplyLeading: false,
-              title: const Text('Edit Community'),
+              title: Text('Edit Profile', style: TextStyle(
+                color: theme.colorScheme.onPrimary,
+              ),),
               actions: [
                 TextButton(
                   onPressed: ()=>saveDetails(context, ref, profile),
-                  child: Text(
+                  child: const Text(
                     'Save',
                     style: TextStyle(color: Palette.blueColor),
                   ),

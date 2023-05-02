@@ -37,7 +37,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ThemeData theme = ref.watch(themeProvider);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: (_page==1)?AppBar(
+        leading: Builder(builder: (context) {
+          return IconButton(
+            onPressed: () => displayDrawer(context),
+            icon: CircleAvatar(
+              backgroundImage: NetworkImage(user.displayPic),
+              radius: 35,
+            ),
+          );
+        }),
+        title: TextFormField(
+          onTap: (){},
+          readOnly: true,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(32),
+            ),
+            filled: true,
+            hintText: 'Search Twitter',
+            hintStyle: TextStyle(
+              color: theme.colorScheme.onSurface,
+            ),
+            fillColor: theme.colorScheme.surface,
+          ),
+        ),
+      ):
+      AppBar(
         backgroundColor: theme.colorScheme.background,
         leading: Builder(builder: (context) {
           return IconButton(

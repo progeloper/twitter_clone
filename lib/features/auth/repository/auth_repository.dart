@@ -54,8 +54,8 @@ class AuthRepository {
           url: url,
           joined: joined,
           dob: dob,
-          followers: [],
-          following: []);
+          followers: [cred.user!.uid],
+          following: [cred.user!.uid]);
       await _users.doc(user.uid).set(user.toMap());
       return right(user);
     } on FirebaseException catch (e) {

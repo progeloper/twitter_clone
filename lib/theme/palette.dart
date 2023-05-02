@@ -65,8 +65,8 @@ class Palette {
       onError: Palette.whiteColor,
       background: Palette.blackColor,
       onBackground: Palette.extraExtraLightGrey,
-      surface: Palette.blackColor,
-      onSurface: Palette.extraExtraLightGrey,
+      surface: Palette.darkBlueColor,
+      onSurface: Palette.darkGreyColor,
     ),
   );
 
@@ -117,7 +117,7 @@ class Palette {
       background: Palette.whiteColor,
       onBackground: Palette.blackColor,
       surface: Palette.lightGreyColor,
-      onSurface: Palette.blackColor,
+      onSurface: Palette.darkGreyColor,
     ),
   );
 
