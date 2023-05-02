@@ -4,8 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
-import 'package:twitter_clone/features/home/screens/settings_screen.dart';
-import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
 class HomeDrawer extends ConsumerWidget {
@@ -15,7 +13,7 @@ class HomeDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.read(userProvider);
+    final user = ref.watch(userProvider);
     final theme = ref.watch(themeProvider);
 
     return Drawer(

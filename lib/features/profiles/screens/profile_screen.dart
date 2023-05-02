@@ -9,6 +9,7 @@ import 'package:twitter_clone/core/common/widgets/rounded_filled_button.dart';
 import 'package:twitter_clone/core/common/widgets/tweet_card.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/profiles/controller/profile_controller.dart';
+import 'package:twitter_clone/models/user.dart';
 import 'package:twitter_clone/theme/palette.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -23,7 +24,15 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _ProfileScreenState();
 }
 
+
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+
+  void followUser(BuildContext context, WidgetRef ref, User currentUser){
+    ref.watch(profileControllerProvider.notifier).followUser(widget.uid, currentUser, context);
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.read(userProvider);
@@ -67,31 +76,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             (widget.uid != user!.uid)
                                 ? Align(
                                     alignment: Alignment.topRight,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(Icons.mail_outline)),
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(Icons
-                                                .notification_add_outlined)),
-                                        (profile.following.contains(user!.uid))
-                                            ? RoundedFilledButton(
-                                                function: () {},
-                                                label: 'Following',
-                                                color: theme
-                                                    .colorScheme.background,
-                                              )
-                                            : RoundedFilledButton(
-                                                function: () {},
-                                                label: 'Follow',
-                                                color: theme
-                                                    .colorScheme.background,
-                                              ),
-                                      ],
+                                    child: SizedBox(
+                                      width: 120,
+                                      child:RoundedFilledButton(
+                                        function: ()=>followUser(context, ref, user),
+                                        label: (profile.followers.contains(user.uid))?'Following':'Follow',
+                                        color: theme
+                                            .colorScheme.background,
+                                      ),
                                     ),
                                   )
                                 : Align(

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:twitter_clone/core/constants/constants.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/home/drawers/home_drawer.dart';
+import 'package:twitter_clone/features/search/delegates/search_delegate.dart';
 
 import '../../../theme/palette.dart';
 
@@ -38,6 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: (_page==1)?AppBar(
+        backgroundColor: theme.colorScheme.background,
         leading: Builder(builder: (context) {
           return IconButton(
             onPressed: () => displayDrawer(context),
@@ -47,20 +49,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           );
         }),
-        title: TextFormField(
-          onTap: (){},
-          readOnly: true,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(32),
+        title: SizedBox(
+          height: 40,
+          child: TextFormField(
+            onTap: (){
+              showSearch(context: context, delegate: SearchProfilesDelegate(ref: ref));
+            },
+            readOnly: true,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(32),
+              ),
+              filled: true,
+              hintText: 'Search Twitter',
+              hintStyle: TextStyle(
+                color: theme.colorScheme.onSurface,
+              ),
+              fillColor: theme.colorScheme.surface,
             ),
-            filled: true,
-            hintText: 'Search Twitter',
-            hintStyle: TextStyle(
-              color: theme.colorScheme.onSurface,
-            ),
-            fillColor: theme.colorScheme.surface,
           ),
         ),
       ):

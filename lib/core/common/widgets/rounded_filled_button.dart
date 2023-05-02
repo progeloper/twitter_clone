@@ -20,6 +20,7 @@ class RoundedFilledButton extends StatelessWidget {
         backgroundColor: color,
         minimumSize: Size(MediaQuery.of(context).size.width, 30),
         shape: RoundedRectangleBorder(
+          side: BorderSide(color: Palette.lightGreyColor, width: 1),
           borderRadius: BorderRadius.circular(32),
         ),
       ),

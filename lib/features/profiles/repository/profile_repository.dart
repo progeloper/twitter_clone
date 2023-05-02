@@ -37,21 +37,21 @@ class ProfileRepository {
         .map((event) => User.fromMap(event.data() as Map<String, dynamic>));
   }
 
-  FutureVoid followUser(User other, User currentUser) async {
+  FutureVoid followUser(String otherId, User currentUser) async {
     try {
-      if (currentUser.following.contains(other.uid)) {
-        _users.doc(other.uid).update({
+      if (currentUser.following.contains(otherId)) {
+        _users.doc(otherId).update({
           'followers': FieldValue.arrayRemove([currentUser.uid]),
         });
         return right(_users.doc(currentUser.uid).update({
-          'following': FieldValue.arrayRemove([other.uid]),
+          'following': FieldValue.arrayRemove([otherId]),
         }));
       } else {
-        _users.doc(other.uid).update({
+        _users.doc(otherId).update({
           'followers': FieldValue.arrayUnion([currentUser.uid]),
         });
         return right(_users.doc(currentUser.uid).update({
-          'following': FieldValue.arrayUnion([other.uid]),
+          'following': FieldValue.arrayUnion([otherId]),
         }));
       }
     } on FirebaseException catch (e) {
@@ -96,6 +96,10 @@ class ProfileRepository {
     } catch (e){
       return left(Failure(e.toString()));
     }
+  }
+
+  Stream<List<User>> searchProfilesByUsername(String query){
+    return _users.where('username', isGreaterThanOrEqualTo: query).snapshots().map((event) => event.docs.map((e) => User.fromMap(e.data() as Map<String, dynamic>)).toList());
   }
   
 }

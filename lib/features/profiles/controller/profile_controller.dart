@@ -36,6 +36,10 @@ final getProfileLikedTweetsProvider = StreamProvider.family((ref, String uid) {
       .getProfileLikedTweets(uid);
 });
 
+final searchProfileByUsernameProvider = StreamProvider.family((ref, String query){
+  return ref.read(profileControllerProvider.notifier).searchProfilesByUsername(query);
+});
+
 class ProfileController extends StateNotifier<bool> {
   final ProfileRepository _repo;
   final FirebaseStorageRepository _storageRepo;
@@ -50,8 +54,8 @@ class ProfileController extends StateNotifier<bool> {
     return _repo.getProfileById(id);
   }
 
-  void followUser(User other, User currentUser, BuildContext context) async {
-    final res = await _repo.followUser(other, currentUser);
+  void followUser(String otherId, User currentUser, BuildContext context) async {
+    final res = await _repo.followUser(otherId, currentUser);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
   }
 
@@ -98,5 +102,9 @@ class ProfileController extends StateNotifier<bool> {
     );
     final res = await _repo.editProfile(user);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => showSnackBar(context, 'Details updated successfully'));
+  }
+
+  Stream<List<User>> searchProfilesByUsername(String query){
+    return _repo.searchProfilesByUsername(query);
   }
 }
