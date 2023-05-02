@@ -78,11 +78,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     alignment: Alignment.topRight,
                                     child: SizedBox(
                                       width: 120,
-                                      child:RoundedFilledButton(
+                                      child:(profile.followers.contains(user.uid))?RoundedFilledButton(
                                         function: ()=>followUser(context, ref, user),
-                                        label: (profile.followers.contains(user.uid))?'Following':'Follow',
+                                        label: 'Following',
                                         color: theme
                                             .colorScheme.background,
+                                      ):RoundedFilledButton(
+                                        function: ()=>followUser(context, ref, user),
+                                        label: 'Follow',
+                                        color: theme
+                                            .colorScheme.tertiary,
                                       ),
                                     ),
                                   )

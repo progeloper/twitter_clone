@@ -79,7 +79,7 @@ class TweetRepository {
 
   Stream<List<User>> getUsersFollowing(String id) {
     return _users
-        .where('following', arrayContains: id)
+        .where('followers', arrayContains: id)
         .snapshots()
         .map((event) {
       List<User> users = [];

@@ -67,6 +67,7 @@ class Palette {
       onBackground: Palette.extraExtraLightGrey,
       surface: Palette.darkBlueColor,
       onSurface: Palette.darkGreyColor,
+      tertiary: Palette.whiteColor,
     ),
   );
 
@@ -118,6 +119,7 @@ class Palette {
       onBackground: Palette.blackColor,
       surface: Palette.lightGreyColor,
       onSurface: Palette.darkGreyColor,
+      tertiary: Palette.blueColor,
     ),
   );
 
