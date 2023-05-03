@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:twitter_clone/core/providers/storage_repository_provider.dart';
 import 'package:twitter_clone/features/tweets/repository/tweet_repository.dart';
 import 'package:twitter_clone/models/comment.dart';
+import 'package:twitter_clone/models/notification.dart' as notif;
 import 'package:twitter_clone/models/tweet.dart';
 import 'package:twitter_clone/models/user.dart';
 import 'package:uuid/uuid.dart';
@@ -62,9 +62,9 @@ class TweetControllerNotifier extends StateNotifier<bool> {
     final String postedAt = DateFormat('dd MMMM yyyy').format(DateTime.now());
     List<String> imageLink = [];
     if (files.isNotEmpty) {
-      for(int i=0;i<files.length;i++){
-        final upload =
-            await _storageRepo.storeFile('tweets/${tweetId}${i.toString()}', tweetId, files[i]);
+      for (int i = 0; i < files.length; i++) {
+        final upload = await _storageRepo.storeFile(
+            'tweets/$tweetId${i.toString()}', tweetId, files[i]);
         upload.fold((l) => showSnackBar(context, 'An error occurred'), (r) {
           imageLink.add(r);
         });
@@ -99,9 +99,9 @@ class TweetControllerNotifier extends StateNotifier<bool> {
     final String postedAt = DateFormat('dd MMMM yyyy').format(DateTime.now());
     List<String> imageLink = [];
     if (files.isNotEmpty) {
-      for(int i=0;i<files.length;i++){
-        final upload =
-        await _storageRepo.storeFile('tweets/${commentId}${i.toString()}', commentId, files[i]);
+      for (int i = 0; i < files.length; i++) {
+        final upload = await _storageRepo.storeFile(
+            'tweets/$commentId${i.toString()}', commentId, files[i]);
         upload.fold((l) => showSnackBar(context, 'An error occurred'), (r) {
           imageLink.add(r);
         });
@@ -151,23 +151,60 @@ class TweetControllerNotifier extends StateNotifier<bool> {
     return _repo.getTweetFromId(id);
   }
 
-  void likeTweet(Tweet tweet, String likerId, BuildContext context)async{
-    final res = await _repo.likeTweet(tweet, likerId);
+  void likeTweet(Tweet tweet, User liker, BuildContext context) async {
+    notif.Notification notification = notif.Notification(
+      profilePic: liker.displayPic,
+      name: liker.name,
+      title: '${liker.name} liked your tweet',
+      notifId: const Uuid().v1(),
+      uid: tweet.uid,
+      mutualId: liker.uid,
+      time: DateFormat('dd MMMM yyyy').format(DateTime.now()),
+    );
+    final res = await _repo.likeTweet(tweet, liker.uid, notification);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
   }
 
-  void retweetTweet(Tweet tweet, String userId, BuildContext context)async{
-    final res = await _repo.retweetTweet(tweet, userId);
+  void retweetTweet(Tweet tweet, User user, BuildContext context) async {
+    notif.Notification notification = notif.Notification(
+      profilePic: user.displayPic,
+      name: user.name,
+      title: '${user.name} retweeted your tweet',
+      notifId: const Uuid().v1(),
+      uid: tweet.uid,
+      mutualId: user.uid,
+      time: DateFormat('dd MMMM yyyy').format(DateTime.now()),
+    );
+    final res = await _repo.retweetTweet(tweet, user.uid, notification);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
   }
 
-  void likeComment(Comment comment, String likerId, BuildContext context)async{
-    final res = await _repo.likeComment(comment, likerId);
+  void likeComment(Comment comment, User liker, BuildContext context) async {
+    notif.Notification notification = notif.Notification(
+      profilePic: liker.displayPic,
+      name: liker.name,
+      title: '${liker.name} liked your reply',
+      notifId: const Uuid().v1(),
+      uid: comment.uid,
+      mutualId: liker.uid,
+      time: DateFormat('dd MMMM yyyy').format(DateTime.now()),
+    );
+    final res = await _repo.likeComment(comment, liker.uid, notification);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
   }
 
-  void retweetComment(Comment comment, String userId, BuildContext context)async{
-    final res = await _repo.retweetComment(comment, userId);
+  void retweetComment(
+      Comment comment, User user, BuildContext context) async {
+    notif.Notification notification = notif.Notification(
+      profilePic: user.displayPic,
+      name: user.name,
+      title: '${user.name} retweeted your reply',
+      notifId: const Uuid().v1(),
+      uid: comment.uid,
+      mutualId: user.uid,
+      time: DateFormat('dd MMMM yyyy').format(DateTime.now()),
+    );
+    final res = await _repo.retweetComment(comment, user.uid, notification);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
   }
 }

@@ -6,6 +6,7 @@ import 'package:twitter_clone/core/failure.dart';
 import 'package:twitter_clone/core/providers/firebase_providers.dart';
 import 'package:twitter_clone/core/type_defs.dart';
 import 'package:twitter_clone/models/comment.dart';
+import 'package:twitter_clone/models/notification.dart';
 
 import '../../../models/tweet.dart';
 import '../../../models/user.dart';
@@ -30,6 +31,8 @@ class ProfileRepository {
   CollectionReference get _comments =>
       _firestore.collection(FirebaseConstants.commentsCollectiion);
 
+  CollectionReference get _notifications => _firestore.collection(FirebaseConstants.notificationsCollection);
+
   Stream<User> getProfileById(String id) {
     return _users
         .doc(id)
@@ -37,20 +40,21 @@ class ProfileRepository {
         .map((event) => User.fromMap(event.data() as Map<String, dynamic>));
   }
 
-  FutureVoid followUser(String otherId, User currentUser) async {
+  FutureVoid followUser(String otherId, User currentUser, Notification notification) async {
     try {
       if (currentUser.following.contains(otherId)) {
-        _users.doc(otherId).update({
+        await _users.doc(otherId).update({
           'followers': FieldValue.arrayRemove([currentUser.uid]),
         });
-        return right(_users.doc(currentUser.uid).update({
+        return right(await _users.doc(currentUser.uid).update({
           'following': FieldValue.arrayRemove([otherId]),
         }));
       } else {
-        _users.doc(otherId).update({
+        await _notifications.doc(notification.notifId).set(notification.toMap());
+        await _users.doc(otherId).update({
           'followers': FieldValue.arrayUnion([currentUser.uid]),
         });
-        return right(_users.doc(currentUser.uid).update({
+        return right(await _users.doc(currentUser.uid).update({
           'following': FieldValue.arrayUnion([otherId]),
         }));
       }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:twitter_clone/core/common/error_text.dart';
 import 'package:twitter_clone/core/common/loader.dart';
@@ -9,7 +8,6 @@ import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/tweets/controller/tweet_controller.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
-import '../../tweets/screens/create_tweet_screen.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({
@@ -44,18 +42,16 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                     itemCount: tweets.length,
                     itemBuilder: (context, index) {
                       final tweet = tweets[index];
-                      print(tweet.name);
                       return TweetCard(tweet: tweet);
                     },
                   );
                 },
                 error: (error, stackTrace) {
-                  print(stackTrace.toString());
                   return Center(child: ErrorText(error: error.toString()));
                 },
                 loading: () => const Center(child: Loader()));
           },
-          error: (error, StackTrace) =>
+          error: (error, stackTrace) =>
               Center(child: ErrorText(error: error.toString())),
           loading: () => const Center(child: Loader())),
     );

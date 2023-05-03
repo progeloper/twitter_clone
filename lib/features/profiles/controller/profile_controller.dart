@@ -1,12 +1,13 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:twitter_clone/core/providers/storage_repository_provider.dart';
 import 'package:twitter_clone/features/profiles/repository/profile_repository.dart';
 import 'package:twitter_clone/models/comment.dart';
-
+import 'package:twitter_clone/models/notification.dart' as notif;
+import 'package:uuid/uuid.dart';
 import '../../../core/common/utils.dart';
 import '../../../models/tweet.dart';
 import '../../../models/user.dart';
@@ -36,8 +37,11 @@ final getProfileLikedTweetsProvider = StreamProvider.family((ref, String uid) {
       .getProfileLikedTweets(uid);
 });
 
-final searchProfileByUsernameProvider = StreamProvider.family((ref, String query){
-  return ref.read(profileControllerProvider.notifier).searchProfilesByUsername(query);
+final searchProfileByUsernameProvider =
+    StreamProvider.family((ref, String query) {
+  return ref
+      .read(profileControllerProvider.notifier)
+      .searchProfilesByUsername(query);
 });
 
 class ProfileController extends StateNotifier<bool> {
@@ -54,8 +58,16 @@ class ProfileController extends StateNotifier<bool> {
     return _repo.getProfileById(id);
   }
 
-  void followUser(String otherId, User currentUser, BuildContext context) async {
-    final res = await _repo.followUser(otherId, currentUser);
+  void followUser(User other, User currentUser, BuildContext context) async {
+    notif.Notification notification = notif.Notification(
+        profilePic: currentUser.displayPic,
+        name: currentUser.name,
+        title: '${currentUser.name} followed you',
+        notifId: const Uuid().v1(),
+        uid: other.uid,
+        mutualId: currentUser.uid,
+        time: DateFormat('dd MMMM yyyy').format(DateTime.now()));
+    final res = await _repo.followUser(other.uid, currentUser, notification);
     res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => null);
   }
 
@@ -82,16 +94,22 @@ class ProfileController extends StateNotifier<bool> {
     Uint8List? profileImage,
   }) async {
     state = true;
-    if(banner != null){
-      final link = await _storageRepo.storeImage('users/banners', user.uid, banner);
+    if (banner != null) {
+      final link =
+          await _storageRepo.storeImage('users/banners', user.uid, banner);
       String? url;
-      link.fold((l) => showSnackBar(context, l.error), (r){url = r;});
+      link.fold((l) => showSnackBar(context, l.error), (r) {
+        url = r;
+      });
       user = user.copyWith(banner: url);
     }
-    if(profileImage != null){
-      final link = await _storageRepo.storeImage('users/profileImages', user.uid, profileImage);
+    if (profileImage != null) {
+      final link = await _storageRepo.storeImage(
+          'users/profileImages', user.uid, profileImage);
       String? url;
-      link.fold((l) => showSnackBar(context, l.error), (r){url = r;});
+      link.fold((l) => showSnackBar(context, l.error), (r) {
+        url = r;
+      });
       user = user.copyWith(displayPic: url);
     }
     user = user.copyWith(
@@ -101,10 +119,11 @@ class ProfileController extends StateNotifier<bool> {
       url: url,
     );
     final res = await _repo.editProfile(user);
-    res.fold((l) => showSnackBar(context, 'An error occurred'), (r) => showSnackBar(context, 'Details updated successfully'));
+    res.fold((l) => showSnackBar(context, 'An error occurred'),
+        (r) => showSnackBar(context, 'Details updated successfully'));
   }
 
-  Stream<List<User>> searchProfilesByUsername(String query){
+  Stream<List<User>> searchProfilesByUsername(String query) {
     return _repo.searchProfilesByUsername(query);
   }
 }

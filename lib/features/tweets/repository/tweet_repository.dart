@@ -7,7 +7,9 @@ import 'package:twitter_clone/core/failure.dart';
 import 'package:twitter_clone/core/providers/firebase_providers.dart';
 import 'package:twitter_clone/core/type_defs.dart';
 import 'package:twitter_clone/models/comment.dart';
+import 'package:twitter_clone/models/notification.dart';
 import 'package:twitter_clone/models/tweet.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../models/user.dart';
 
@@ -34,6 +36,9 @@ class TweetRepository {
   CollectionReference get _comments =>
       _firestore.collection(FirebaseConstants.commentsCollectiion);
 
+  CollectionReference get _notifications =>
+      _firestore.collection(FirebaseConstants.notificationsCollection);
+
   FutureVoid uploadTweet(Tweet tweet) async {
     try {
       return right(_tweets.doc(tweet.tweetId).set(tweet.toMap()));
@@ -47,7 +52,7 @@ class TweetRepository {
   FutureVoid uploadComment(Comment comment) async {
     try {
       _tweets.doc(comment.parentId).update({
-        'commentCount' : FieldValue.increment(1),
+        'commentCount': FieldValue.increment(1),
       });
       return right(_comments.doc(comment.commentId).set(comment.toMap()));
     } on FirebaseException catch (e) {
@@ -103,74 +108,78 @@ class TweetRepository {
     });
   }
 
-  FutureVoid likeTweet(Tweet tweet, String likerId)async{
-    try{
-      if(!tweet.likes.contains(likerId)) {
+  FutureVoid likeTweet(Tweet tweet, String likerId, Notification notif) async {
+    try {
+      if (!tweet.likes.contains(likerId)) {
+        await _notifications.doc(notif.notifId).set(notif.toMap());
         return right(await _tweets.doc(tweet.tweetId).update({
           'likes': FieldValue.arrayUnion([likerId]),
         }));
-      }else{
+      } else {
         return right(await _tweets.doc(tweet.tweetId).update({
           'likes': FieldValue.arrayRemove([likerId]),
         }));
       }
-    }on FirebaseException catch (e){
+    } on FirebaseException catch (e) {
       throw e.message!;
-    } catch (e){
+    } catch (e) {
       return left(Failure(e.toString()));
     }
   }
 
-  FutureVoid retweetTweet(Tweet tweet, String userId)async{
-    try{
-      if(!tweet.retweets.contains(userId)) {
+  FutureVoid retweetTweet(Tweet tweet, String userId, Notification notif) async {
+    try {
+      if (!tweet.retweets.contains(userId)) {
+        await _notifications.doc(notif.notifId).set(notif.toMap());
         return right(await _tweets.doc(tweet.tweetId).update({
           'retweets': FieldValue.arrayUnion([userId]),
         }));
-      }else{
+      } else {
         return right(await _tweets.doc(tweet.tweetId).update({
           'retweets': FieldValue.arrayRemove([userId]),
         }));
       }
-    }on FirebaseException catch (e){
+    } on FirebaseException catch (e) {
       throw e.message!;
-    } catch (e){
+    } catch (e) {
       return left(Failure(e.toString()));
     }
   }
 
-  FutureVoid likeComment(Comment comment, String likerId)async{
-    try{
-      if(!comment.likes.contains(likerId)) {
+  FutureVoid likeComment(Comment comment, String likerId, Notification notif) async {
+    try {
+      if (!comment.likes.contains(likerId)) {
+        await _notifications.doc(notif.notifId).set(notif.toMap());
         return right(await _comments.doc(comment.commentId).update({
           'likes': FieldValue.arrayUnion([likerId]),
         }));
-      }else{
+      } else {
         return right(await _comments.doc(comment.commentId).update({
           'likes': FieldValue.arrayRemove([likerId]),
         }));
       }
-    }on FirebaseException catch (e){
+    } on FirebaseException catch (e) {
       throw e.message!;
-    } catch (e){
+    } catch (e) {
       return left(Failure(e.toString()));
     }
   }
 
-  FutureVoid retweetComment(Comment comment, String userId)async{
-    try{
-      if(!comment.retweets.contains(userId)) {
+  FutureVoid retweetComment(Comment comment, String userId, Notification notif) async {
+    try {
+      if (!comment.retweets.contains(userId)) {
+        await _notifications.doc(notif.notifId).set(notif.toMap());
         return right(await _comments.doc(comment.commentId).update({
           'retweets': FieldValue.arrayUnion([userId]),
         }));
-      }else{
+      } else {
         return right(await _comments.doc(comment.commentId).update({
           'retweets': FieldValue.arrayRemove([userId]),
         }));
       }
-    }on FirebaseException catch (e){
+    } on FirebaseException catch (e) {
       throw e.message!;
-    } catch (e){
+    } catch (e) {
       return left(Failure(e.toString()));
     }
   }

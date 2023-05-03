@@ -27,8 +27,8 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
-  void followUser(BuildContext context, WidgetRef ref, User currentUser){
-    ref.watch(profileControllerProvider.notifier).followUser(widget.uid, currentUser, context);
+  void followUser(BuildContext context, WidgetRef ref, User other, User currentUser){
+    ref.watch(profileControllerProvider.notifier).followUser(other, currentUser, context);
     setState(() {
     });
   }
@@ -79,12 +79,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     child: SizedBox(
                                       width: 120,
                                       child:(profile.followers.contains(user.uid))?RoundedFilledButton(
-                                        function: ()=>followUser(context, ref, user),
+                                        function: ()=>followUser(context, ref, profile, user),
                                         label: 'Following',
                                         color: theme
                                             .colorScheme.background,
                                       ):RoundedFilledButton(
-                                        function: ()=>followUser(context, ref, user),
+                                        function: ()=>followUser(context, ref, profile, user),
                                         label: 'Follow',
                                         color: theme
                                             .colorScheme.tertiary,

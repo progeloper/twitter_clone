@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,10 +8,10 @@ import 'package:twitter_clone/core/common/loader.dart';
 import 'package:twitter_clone/core/common/widgets/comment_card.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/tweets/controller/tweet_controller.dart';
-import 'package:twitter_clone/features/tweets/screens/create_comment_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
 
 import '../../../models/tweet.dart';
+import '../../../models/user.dart';
 
 class TweetScreen extends ConsumerStatefulWidget {
   final String tweetId;
@@ -84,7 +85,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                       tweet.imageLink[1],
                       fit: BoxFit.cover,
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 2,
                 ),
                 Expanded(
@@ -150,17 +151,17 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
     Routemaster.of(context).pop();
   }
 
-  void likeTweet(BuildContext context, WidgetRef ref, String userId, Tweet tweet) {
+  void likeTweet(BuildContext context, WidgetRef ref, User user, Tweet tweet) {
     ref
         .read(tweetControllerProvider.notifier)
-        .likeTweet(tweet, userId, context);
+        .likeTweet(tweet, user, context);
     setState(() {});
   }
 
-  void retweetTweet(BuildContext context, WidgetRef ref, String userId, Tweet tweet) {
+  void retweetTweet(BuildContext context, WidgetRef ref, User user, Tweet tweet) {
     ref
         .read(tweetControllerProvider.notifier)
-        .retweetTweet(tweet, userId, context);
+        .retweetTweet(tweet, user, context);
     setState(() {});
   }
 
@@ -200,7 +201,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
             onTap: () {
               Routemaster.of(context).push('/create-comment-screen/${tweet!.tweetId}');
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
               filled: false,
               hintText: 'Tweet your reply',
@@ -420,7 +421,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                           ),
                           IconButton(
                             onPressed: () =>
-                                retweetTweet(context, ref, user.uid, tweet),
+                                retweetTweet(context, ref, user, tweet),
                             icon: (tweet.retweets.contains(user!.uid))
                                 ? const FaIcon(
                                     FontAwesomeIcons.retweet,
@@ -432,7 +433,7 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                                   ),
                           ),
                           IconButton(
-                            onPressed: () => likeTweet(context, ref, user.uid, tweet),
+                            onPressed: () => likeTweet(context, ref, user, tweet),
                             icon: (tweet.likes.contains(user.uid))
                                 ? const FaIcon(
                                     FontAwesomeIcons.solidHeart,
@@ -471,7 +472,9 @@ class _TweetScreenState extends ConsumerState<TweetScreen> {
                                     });
                               },
                               error: (error, stackTrace) {
-                                print(stackTrace.toString());
+                                if (kDebugMode) {
+                                  print(stackTrace.toString());
+                                }
                                 return Center(
                                   child: ErrorText(error: error.toString()),
                                 );

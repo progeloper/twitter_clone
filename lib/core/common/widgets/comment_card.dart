@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:routemaster/routemaster.dart';
-import 'package:twitter_clone/features/profiles/screens/profile_screen.dart';
-import 'package:twitter_clone/features/tweets/screens/create_tweet_screen.dart';
-import 'package:twitter_clone/features/tweets/screens/tweet_screen.dart';
 import 'package:twitter_clone/theme/palette.dart';
-
 import '../../../features/auth/controller/auth_controller.dart';
 import '../../../features/tweets/controller/tweet_controller.dart';
 import '../../../models/comment.dart';
@@ -33,17 +29,17 @@ class _CommentCardState extends ConsumerState<CommentCard> {
     return tweeter;
   }
 
-  void likeComment(BuildContext context, WidgetRef ref, String userId) async {
+  void likeComment(BuildContext context, WidgetRef ref, User user) async {
     ref
         .read(tweetControllerProvider.notifier)
-        .likeComment(widget.comment, userId, context);
+        .likeComment(widget.comment, user, context);
     setState(() {});
   }
 
-  void retweetComment(BuildContext context, WidgetRef ref, String userId) async {
+  void retweetComment(BuildContext context, WidgetRef ref, User user) async {
     ref
         .read(tweetControllerProvider.notifier)
-        .retweetComment(widget.comment, userId, context);
+        .retweetComment(widget.comment, user, context);
     setState(() {});
   }
 
@@ -289,7 +285,7 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: ()=>retweetComment(context, ref, user.uid),
+                              onPressed: ()=>retweetComment(context, ref, user),
                               icon: (comment.retweets.contains(user!.uid))
                                   ? const FaIcon(
                                 FontAwesomeIcons.retweet,
@@ -314,8 +310,8 @@ class _CommentCardState extends ConsumerState<CommentCard> {
                           children: [
                             IconButton(
                               onPressed: () =>
-                                  likeComment(context, ref, user.uid),
-                              icon: (comment.likes.contains(user!.uid))
+                                  likeComment(context, ref, user),
+                              icon: (comment.likes.contains(user.uid))
                                   ? const FaIcon(
                                 FontAwesomeIcons.solidHeart,
                                 color: Palette.redColor,
